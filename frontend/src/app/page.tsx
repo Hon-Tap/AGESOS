@@ -230,7 +230,7 @@ export default function Home() {
               <motion.div variants={fadeInUp} className="mt-10 flex flex-wrap gap-4 md:gap-6">
                 <Link
                   href="/get-involved#donate"
-                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-rose-500 px-8 py-4 font-bold text-white transition-all duration-300 hover:scale-105 hover:bg-rose-400 hover:shadow-[0_0_40px_-10px_#f43f5e]"
+                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-green-500 px-8 py-4 font-bold text-white transition-all duration-300 hover:scale-105 hover:bg-green-400 hover:shadow-[0_0_40px_-10px_#f43f5e]"
                 >
                   <span className="absolute right-0 translate-x-full transition-transform duration-300 group-hover:-translate-x-5">
                     ❤️

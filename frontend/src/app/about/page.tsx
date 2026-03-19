@@ -97,32 +97,32 @@ export default function AboutPage() {
   const leadership: Leader[] = [
     {
       id: "ed",
-      name: "Executive Director",
-      role: "Strategy & Governance",
+      name: "Tesloai Par Golong",
+      role: "Executive Director",
       photo: "/images/executive-director.jpg",
       bio: "As the lead visionary of AGE, the Executive Director oversees the entire organizational roadmap, ensuring that every humanitarian intervention aligns with our 2019 founding principles. They manage high-level partnerships with UN agencies and international donors to balance emergency response with long-term development.",
       focus: ["Policy", "Fundraising", "External Relations"],
     },
     {
       id: "dop",
-      name: "Director of Programs",
-      role: "Operations & Quality Control",
+      name: "Gatluak Kedok Jiek",
+      role: "Director of Programs",
       photo: "/images/Bailuk.jpg", 
       bio: "Responsible for the technical integrity of Education, Health, and WASH initiatives, the Director of Programs bridges the gap between Juba HQ and field offices in Jonglei and Warrap. They ensure programs reach their targets, including health awareness for 5,000+ students.",
       focus: ["Implementation", "Technical Oversight", "Field Logistics"],
     },
     {
       id: "fam",
-      name: "Finance & Admin Manager",
-      role: "Financial Accountability",
+      name: "[INSERT NAME]",
+      role: "Finance & Admin Manager",
       photo: "/images/executive-director.jpg",
       bio: "The backbone of AGE's transparency, the Finance and Admin Manager implements rigorous financial controls and audit-ready systems. They manage procurement and HR to ensure that donor funds create sustainable, community-owned impact.",
       focus: ["Audit Compliance", "HR", "Procurement"],
     },
     {
       id: "mne",
-      name: "M&E Coordinator",
-      role: "Impact & Learning",
+      name: "[INSERT NAME]",
+      role: "M&E Coordinator",
       photo: "/images/Bailuk.jpg",
       bio: "Data-driven and results-oriented, the M&E Coordinator tracks every metric from literacy classes to agricultural inputs. By building robust beneficiary feedback loops, they provide the empirical evidence needed to refine youth-led community initiatives.",
       focus: ["Data Analysis", "Reporting", "Knowledge Management"],
@@ -174,7 +174,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* VISION & MISSION - Improved with split layout */}
+      {/* VISION & MISSION */}
       <section className="container mx-auto max-w-7xl px-6 py-32">
         <div className="grid gap-8 lg:grid-cols-2">
           <div className="group relative overflow-hidden rounded-[3.5rem] bg-[#0D1630] p-12 lg:p-16 text-white shadow-2xl transition-transform hover:scale-[1.01]">
@@ -183,7 +183,7 @@ export default function AboutPage() {
              </div>
              <h2 className="text-4xl font-black mb-6">Our Vision</h2>
              <p className="text-xl leading-relaxed text-blue-100/80 italic font-light">
-              "A South Sudan free from illiteracy and poverty, where every generation thrives through equitable access to education, health, and sustainable livelihoods."
+               "A South Sudan free from illiteracy and poverty, where every generation thrives through equitable access to education, health, and sustainable livelihoods."
             </p>
           </div>
 
@@ -193,7 +193,7 @@ export default function AboutPage() {
              </div>
              <h2 className="text-4xl font-black mb-6">Our Mission</h2>
              <p className="text-xl leading-relaxed font-semibold">
-              To work with communities in South Sudan, empowering them to reduce illiteracy and poverty through education, health, and sustainable livelihood programs.
+               To work with communities in South Sudan, empowering them to reduce illiteracy and poverty through education, health, and sustainable livelihood programs.
             </p>
           </div>
         </div>
@@ -227,7 +227,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* LEADERSHIP SECTION - ZigZag Layout */}
+      {/* LEADERSHIP SECTION */}
       <section className="py-32 bg-white">
         <div className="container mx-auto max-w-7xl px-6">
           <div className="text-center max-w-3xl mx-auto mb-24">
@@ -309,7 +309,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* LEADER MODAL - Now showing the photo alongside bio */}
+      {/* LEADER MODAL */}
       <Modal 
         open={!!activeLeader} 
         title="" 
