@@ -69,7 +69,7 @@ export default function AboutPage() {
     },
     {
       id: "FAM",
-      name: "Nyaduoth Manyang",
+      name: "Nyadouth William Deng",
       role: "Finance & Admin Manager",
       photo: "/images/nyaduoth.jpeg",
       bio: "The Finance & Admin Manager oversees the financial health and administrative efficiency of AGE, ensuring responsible stewardship of resources.",
