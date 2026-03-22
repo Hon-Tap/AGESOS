@@ -80,11 +80,11 @@ export default function WhereWeWork() {
               <div className="flex flex-wrap gap-4">
                 <div className="bg-white/5 border border-white/10 backdrop-blur-md p-6 rounded-[2rem] flex-1 min-w-[200px]">
                   <p className="text-[10px] font-black uppercase tracking-widest text-sky-400 mb-2">Presence</p>
-                  <p className="text-3xl font-bold text-white tracking-tight">7 States</p>
+                  <p className="text-3xl font-bold text-white tracking-tight">4 States</p>
                 </div>
                 <div className="bg-white/5 border border-white/10 backdrop-blur-md p-6 rounded-[2rem] flex-1 min-w-[200px]">
                   <p className="text-[10px] font-black uppercase tracking-widest text-sky-400 mb-2">Infrastructure</p>
-                  <p className="text-3xl font-bold text-white tracking-tight">15+ Offices</p>
+                  <p className="text-3xl font-bold text-white tracking-tight">4 Offices</p>
                 </div>
               </div>
             </motion.div>
