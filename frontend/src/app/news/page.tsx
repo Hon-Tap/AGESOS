@@ -1,17 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowRight, 
-  Calendar, 
-  Clock, 
-  ChevronDown, 
-  Share2,
-  Bookmark,
   X,
-  ArrowLeft
+  ArrowLeft,
+  Share2,
+  Calendar,
+  Clock,
+  ChevronDown
 } from "lucide-react";
 
 // --- Types ---
@@ -22,72 +21,84 @@ interface Article {
   readTime: string;
   excerpt: string;
   image: string;
-  content?: string; // Full body text for the modal
+  content?: string;
 }
 
 export default function NewsPage() {
-  const [visibleCount, setVisibleCount] = useState(3);
+  const [filter, setFilter] = useState("All");
+  const [showAll, setShowAll] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  const categories = ["All", "Emergency", "Education", "Reporting", "Livelihoods", "Health"];
+
   const featuredArticle: Article = {
-    title: "New Sustainable School Opens in Juba, Transforming Access for 500+ Children",
+    title: "Freedom Academy: Transforming Access for 500+ Children in Juba",
     date: "Oct 12, 2025",
     cat: "Education",
     readTime: "5 min read",
-    excerpt: "After months of community-led construction, the new facility opens its doors, providing a safe learning environment for children affected by crisis.",
+    excerpt: "A climate-resilient facility built with local materials opens its doors to displaced youth in Central Equatoria.",
     image: "/images/news/school-opening.jpeg",
-    content: "South Sudan's educational landscape reached a major milestone today. In the heart of Juba, the 'Freedom Academy' officially opened its doors. This isn't just a building; it's a climate-resilient structure built with local materials. The project, led by AGE youth volunteers, incorporates solar-powered classrooms and rainwater harvesting systems. Over 500 children who were previously out of school due to local displacement now have a permanent place to learn, grow, and heal. The curriculum will focus not only on standard academics but also on peace-building and vocational skills pertinent to the local economy."
+    content: "South Sudan's educational landscape reached a major milestone today. In the heart of Juba, the 'Freedom Academy' officially opened its doors. This isn't just a building; it's a climate-resilient structure built with local materials. Over 500 children who were previously out of school due to local displacement now have a permanent place to learn, grow, and heal."
   };
 
-  const articles: Article[] = [
+  const allArticles: Article[] = [
     { 
       title: "Rapid WASH Response Deployed in Jonglei Flood Zones", 
       date: "Sep 28, 2025", 
       cat: "Emergency", 
       readTime: "3 min read",
-      excerpt: "The AGE emergency team has deployed purification kits to heavily flooded areas, protecting over 2,000 families.",
-      image: "/images/news/jonglei-water.jpeg",
-      content: "As water levels rose to record heights in Jonglei, our rapid response teams moved within 24 hours. We distributed over 2,500 point-of-use water treatment kits and conducted hygiene promotion sessions. Our focus remains on preventing cholera outbreaks in congested displacement camps."
+      excerpt: "Emergency teams deploy purification kits to protect 2,000 families from waterborne diseases.",
+      image: "/images/news/jonglei-water.jpeg"
     },
     { 
-      title: "Publishing Our Annual Impact Report 2025", 
+      title: "Transparency First: Publishing Our Annual Impact Report 2025", 
       date: "Sep 15, 2025", 
       cat: "Reporting", 
       readTime: "10 min read",
-      excerpt: "A comprehensive, transparent look at our achievements, financial health, and the vital lessons learned.",
-      image: "/images/news/partnership.jpeg",
-      content: "Transparency is our core value. The 2025 Impact Report details how 92% of all donations went directly to field programming. We've mapped our growth across 10 states and highlighted the challenges of logistical navigation during the rainy season."
+      excerpt: "A comprehensive look at how 92% of donations went directly to field programming.",
+      image: "/images/news/partnership.jpeg"
     },
     { 
-      title: "Empowering Local Farmers with Climate-Resilient Seeds", 
+      title: "Climate-Resilient Seeds: Empowering Local Farmers", 
       date: "Aug 30, 2025", 
       cat: "Livelihoods", 
       readTime: "4 min read",
-      excerpt: "Our latest initiative distributes drought-resistant crop varieties to 300 households to stabilize food security.",
-      image: "/images/news/unity-education.jpeg",
-      content: "Agriculture is the backbone of South Sudanese resilience. By introducing short-cycle, drought-resistant sorghum and maize varieties, we are helping families harvest even when the rains are unpredictable."
+      excerpt: "Distributing drought-resistant crop varieties to stabilize food security in 300 households.",
+      image: "/images/news/unity-education.jpeg"
     },
     { 
       title: "Expanding Maternal Health Outreach in Remote Villages", 
       date: "Aug 12, 2025", 
       cat: "Health", 
       readTime: "6 min read",
-      excerpt: "Mobile health clinics are now reaching three new districts, bringing essential prenatal care directly to mothers.",
-      image: "/images/news/maternal-health.jpeg",
-      content: "Distance should not be a death sentence. Our mobile units are equipped with basic ultrasound tech and essential vitamins, ensuring that even the most remote mothers get the care they deserve."
+      excerpt: "Mobile health clinics bring essential prenatal care directly to expectant mothers.",
+      image: "/images/news/maternal-health.jpeg"
+    },
+    { 
+      title: "Youth Leadership Forum: Shaping the Future of Peace", 
+      date: "Jul 25, 2025", 
+      cat: "Education", 
+      readTime: "4 min read",
+      excerpt: "Engaging 100+ youth leaders in conflict resolution and community development workshops.",
+      image: "/images/news/youth-peace.jpeg"
     }
   ];
 
-  // Handle Scroll Progress for Modal
+  const filteredArticles = filter === "All" 
+    ? allArticles 
+    : allArticles.filter(a => a.cat === filter);
+
+  // Determine which articles to display based on the "showAll" toggle
+  const displayedArticles = showAll ? filteredArticles : filteredArticles.slice(0, 3);
+
   useEffect(() => {
     const handleScroll = () => {
       if (modalRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = modalRef.current;
         const totalHeight = scrollHeight - clientHeight;
-        const windowScroll = (scrollTop / totalHeight) * 100;
-        setScrollProgress(windowScroll);
+        setScrollProgress((scrollTop / totalHeight) * 100);
       }
     };
     const currentModal = modalRef.current;
@@ -96,183 +107,187 @@ export default function NewsPage() {
   }, [selectedArticle]);
 
   return (
-    <main className="min-h-screen bg-[#FCFDFF] pb-24 selection:bg-[#60A0D2]/30">
+    <main className="min-h-screen bg-[#FDFDFD] pb-24 text-slate-900">
       
-      {/* 1. CINEMATIC HERO */}
-      <section className="relative h-[85vh] min-h-[600px] w-full overflow-hidden bg-[#0D1630]">
-        <Image 
-          src={featuredArticle.image} 
-          alt={featuredArticle.title}
-          fill
-          priority
-          className="object-cover opacity-60 scale-105 animate-slow-zoom"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0D1630] via-[#0D1630]/40 to-transparent" />
-        
-        <div className="absolute inset-0 flex items-end pb-20">
-          <div className="container mx-auto max-w-7xl px-6">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-3 rounded-full bg-[#60A0D2] px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-[#0D1630] mb-6 shadow-xl">
-                Latest Update • {featuredArticle.cat}
+      {/* 1. HERO SECTION */}
+      <section className="pt-32 pb-16 lg:pt-44 lg:pb-20 bg-slate-50">
+        <div className="container mx-auto max-w-7xl px-6">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+              <div className="inline-block rounded-full bg-sky-100 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-sky-700">
+                Latest Major Update
               </div>
-              <h1 className="text-4xl md:text-7xl font-black text-white leading-[1.1] tracking-tight mb-8">
+              <h1 className="text-4xl lg:text-5xl font-black leading-tight text-slate-900">
                 {featuredArticle.title}
               </h1>
-              <div className="flex gap-4">
-                <button 
-                  onClick={() => setSelectedArticle(featuredArticle)}
-                  className="inline-flex items-center justify-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-black uppercase tracking-widest text-[#0D1630] transition-all hover:bg-[#60A0D2] hover:scale-105"
-                >
-                  Read Full Story <ArrowRight size={18} />
-                </button>
-              </div>
+              <p className="text-lg text-slate-600 font-light leading-relaxed">
+                {featuredArticle.excerpt}
+              </p>
+              <button 
+                onClick={() => setSelectedArticle(featuredArticle)}
+                className="flex items-center gap-3 text-sm font-bold text-sky-600 hover:text-sky-700 transition-all group"
+              >
+                Read full story <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </motion.div>
+            <div className="relative aspect-video rounded-3xl overflow-hidden shadow-xl border border-slate-200">
+              <Image src={featuredArticle.image} alt="" fill className="object-cover" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. RECENT STORIES GRID */}
-      <section className="container mx-auto max-w-7xl px-6 -mt-10 relative z-30">
-        <div className="grid gap-8">
-          <div className="flex items-end justify-between bg-white/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-slate-100 shadow-xl mb-4">
-            <div>
-              <h2 className="text-3xl font-black text-[#0D1630]">Field Reports</h2>
-              <p className="text-slate-500 font-medium">Stories of resilience from the ground.</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.slice(0, visibleCount).map((post, idx) => (
-              <article 
-                key={post.title} 
-                onClick={() => setSelectedArticle(post)}
-                className={`group cursor-pointer bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden transition-all duration-500 hover:shadow-2xl ${idx !== 0 ? 'scale-[0.97] opacity-90' : 'shadow-lg'}`}
+      {/* 2. FILTER TABS & DYNAMIC GRID */}
+      <section className="container mx-auto max-w-7xl px-6 py-16">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-100 pb-8 mb-12">
+          <h2 className="text-2xl font-black">Field Updates</h2>
+          
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => {
+                  setFilter(cat);
+                  setShowAll(false); // Reset view when changing categories
+                }}
+                className={`px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all
+                  ${filter === cat 
+                    ? "bg-slate-900 text-white shadow-md" 
+                    : "bg-white text-slate-400 hover:text-slate-900 ring-1 ring-slate-200"}`}
               >
-                <div className="relative aspect-video overflow-hidden">
-                  <Image src={post.image} alt={post.title} fill className="object-cover transition-transform group-hover:scale-110" />
-                </div>
-                <div className="p-8">
-                  <span className="text-[10px] font-black uppercase text-[#60A0D2] tracking-widest">{post.cat}</span>
-                  <h3 className="font-black text-[#0D1630] text-xl mt-2 mb-4 group-hover:text-[#60A0D2] transition-colors">{post.title}</h3>
-                  <p className="text-slate-500 text-sm line-clamp-2 mb-6">{post.excerpt}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">{post.date}</span>
-                    <div className="h-10 w-10 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-[#0D1630] group-hover:text-white transition-all">
-                      <ArrowRight size={16} />
-                    </div>
-                  </div>
-                </div>
-              </article>
+                {cat}
+              </button>
             ))}
           </div>
-
-          {visibleCount < articles.length && (
-            <button onClick={() => setVisibleCount(v => v + 3)} className="mx-auto mt-8 flex items-center gap-2 font-black text-xs uppercase tracking-[0.2em] text-slate-400 hover:text-[#0D1630]">
-              Load More <ChevronDown size={16} />
-            </button>
-          )}
         </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <AnimatePresence mode="popLayout">
+            {displayedArticles.map((post) => (
+              <motion.article 
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                key={post.title} 
+                onClick={() => setSelectedArticle(post)}
+                className="group cursor-pointer space-y-4"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100">
+                  <Image src={post.image} alt={post.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3 text-[10px] font-bold uppercase text-sky-600">
+                    <span>{post.cat}</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-300" />
+                    <span className="text-slate-400">{post.date}</span>
+                  </div>
+                  <h3 className="text-lg font-bold leading-snug group-hover:text-sky-600 transition-colors">
+                    {post.title}
+                  </h3>
+                  <p className="text-sm text-slate-500 line-clamp-2 font-light">{post.excerpt}</p>
+                </div>
+              </motion.article>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Load More Button */}
+        {!showAll && filteredArticles.length > 3 && (
+          <div className="mt-16 text-center">
+            <button 
+              onClick={() => setShowAll(true)}
+              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3 text-[11px] font-black uppercase tracking-widest text-slate-900 ring-1 ring-slate-200 hover:bg-slate-50 transition-all shadow-sm"
+            >
+              View More Stories <ChevronDown size={16} />
+            </button>
+          </div>
+        )}
       </section>
 
-      {/* 3. MODERN MODAL (The Reveal) */}
-      {selectedArticle && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-10 animate-in fade-in duration-300">
-          <div className="absolute inset-0 bg-[#0D1630]/90 backdrop-blur-md" onClick={() => setSelectedArticle(null)} />
-          
-          <div 
-            ref={modalRef}
-            className="relative w-full max-w-5xl h-full bg-white rounded-[3rem] overflow-y-auto shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-10 duration-500"
+      {/* 3. CENTERED COMPACT MODAL */}
+      <AnimatePresence>
+        {selectedArticle && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
           >
-            {/* Modal Progress Bar */}
-            <div className="sticky top-0 z-50 h-1.5 w-full bg-slate-100">
-              <div className="h-full bg-[#60A0D2] transition-all duration-150" style={{ width: `${scrollProgress}%` }} />
-            </div>
-
-            {/* Modal Header Controls */}
-            <div className="sticky top-1.5 z-40 flex items-center justify-between p-6 bg-white/80 backdrop-blur-md border-b border-slate-50">
-              <button onClick={() => setSelectedArticle(null)} className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-[#0D1630]">
-                <ArrowLeft size={16} /> Back to News
-              </button>
-              <div className="flex gap-2">
-                <button className="p-3 rounded-full hover:bg-slate-50"><Share2 size={18} /></button>
-                <button onClick={() => setSelectedArticle(null)} className="p-3 rounded-full bg-slate-100 hover:bg-red-50 hover:text-red-500 transition-colors"><X size={18} /></button>
-              </div>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-8 lg:p-20 pt-10">
-              <div className="max-w-3xl mx-auto">
-                <div className="flex items-center gap-4 text-xs font-bold text-[#60A0D2] uppercase tracking-[0.2em] mb-6">
-                  <span>{selectedArticle.cat}</span>
-                  <span className="h-1 w-1 rounded-full bg-slate-200" />
-                  <span className="text-slate-400">{selectedArticle.readTime}</span>
+            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setSelectedArticle(null)} />
+            
+            <motion.div 
+              ref={modalRef}
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 30, opacity: 0 }}
+              className="relative w-full max-w-3xl max-h-[85vh] bg-white rounded-[2rem] overflow-y-auto shadow-2xl no-scrollbar"
+            >
+              {/* Header */}
+              <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                <button onClick={() => setSelectedArticle(null)} className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors">
+                  <ArrowLeft size={16} /> Back
+                </button>
+                <div className="flex items-center gap-4">
+                   <button className="text-slate-400 hover:text-slate-900"><Share2 size={18} /></button>
+                   <button onClick={() => setSelectedArticle(null)} className="h-8 w-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-red-50 hover:text-red-500 transition-colors">
+                    <X size={18} />
+                   </button>
                 </div>
-                <h2 className="text-4xl lg:text-6xl font-black text-[#0D1630] leading-tight mb-10">{selectedArticle.title}</h2>
-                
-                <div className="relative aspect-video rounded-[2.5rem] overflow-hidden mb-12 shadow-2xl">
+                <div className="absolute bottom-0 left-0 h-0.5 bg-sky-500 transition-all duration-150" style={{ width: `${scrollProgress}%` }} />
+              </div>
+
+              {/* Body */}
+              <div className="p-8 md:p-14">
+                <div className="space-y-4 mb-8">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-sky-600">{selectedArticle.cat}</span>
+                  <h2 className="text-2xl md:text-3xl font-black text-slate-900 leading-tight">
+                    {selectedArticle.title}
+                  </h2>
+                  <div className="flex items-center gap-4 text-[10px] text-slate-400 font-medium">
+                    <span className="flex items-center gap-1"><Calendar size={12}/> {selectedArticle.date}</span>
+                    <span className="flex items-center gap-1"><Clock size={12}/> {selectedArticle.readTime}</span>
+                  </div>
+                </div>
+
+                <div className="relative aspect-video rounded-2xl overflow-hidden mb-10 border border-slate-100 shadow-sm">
                   <Image src={selectedArticle.image} alt="" fill className="object-cover" />
                 </div>
 
                 <div className="prose prose-slate max-w-none">
-                  <p className="text-xl leading-relaxed text-slate-600 font-medium">
+                  <p className="text-lg leading-relaxed text-slate-600 font-light">
                     {selectedArticle.content || selectedArticle.excerpt}
                   </p>
-                  <div className="h-px w-full bg-slate-100 my-12" />
-                  
-                  {/* RELATED STORIES SECTION */}
-                  <div className="not-prose">
-                    <h4 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-8">Related Field Stories</h4>
-                    <div className="grid sm:grid-cols-2 gap-6">
-                      {articles.filter(a => a.title !== selectedArticle.title).slice(0, 2).map(related => (
-                        <button 
-                          key={related.title}
-                          onClick={() => {
-                            setSelectedArticle(related);
-                            modalRef.current?.scrollTo(0, 0);
-                          }}
-                          className="group flex gap-4 text-left p-4 rounded-3xl border border-slate-100 hover:border-[#60A0D2] transition-all"
-                        >
-                          <div className="relative h-20 w-20 shrink-0 rounded-2xl overflow-hidden">
-                            <Image src={related.image} alt="" fill className="object-cover" />
-                          </div>
-                          <div>
-                            <p className="text-[10px] font-bold text-[#60A0D2] uppercase">{related.cat}</p>
-                            <p className="font-bold text-[#0D1630] text-sm leading-snug line-clamp-2 mt-1">{related.title}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  <p className="text-lg leading-relaxed text-slate-600 font-light mt-6">
+                    This initiative underscores our commitment to resilience and long-term sustainability. 
+                    By engaging directly with community stakeholders, we ensure that every program we deploy 
+                    is built to last and truly serves the people of South Sudan.
+                  </p>
+                </div>
+
+                <div className="mt-12 pt-8 border-t border-slate-100 flex items-center justify-center">
+                   <div className="text-center">
+                      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">A publication of</p>
+                      <p className="text-sm font-bold text-slate-900">AGE South Sudan Operations</p>
+                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 4. NEWSLETTER */}
-      <section className="container mx-auto max-w-7xl px-6 mt-32">
-        <div className="rounded-[4rem] bg-[#0D1630] p-12 lg:p-24 text-center relative overflow-hidden">
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <h2 className="text-4xl font-black text-white mb-6">Never miss an update.</h2>
-            <p className="text-slate-400 text-lg mb-10">Sign up for our monthly digest of field activities and impact stories.</p>
-            <form className="flex flex-col sm:flex-row gap-4">
-              <input type="email" placeholder="Enter your email" className="flex-1 rounded-full bg-white/10 border border-white/20 px-8 py-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#60A0D2]" />
-              <button className="rounded-full bg-[#60A0D2] px-10 py-4 font-black uppercase tracking-widest text-[#0D1630] hover:bg-white transition-all">Subscribe</button>
-            </form>
-          </div>
+      <section className="container mx-auto max-w-5xl px-6 mt-12">
+        <div className="rounded-[2.5rem] bg-slate-900 p-12 text-center text-white">
+          <h2 className="text-2xl font-black mb-4">Stay Informed</h2>
+          <p className="text-slate-400 font-light text-sm mb-8 max-w-sm mx-auto">Receive a monthly digest of our field activities and humanitarian impact.</p>
+          <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+             <input type="email" placeholder="Your email" className="flex-1 bg-white/5 border border-white/10 rounded-full px-6 py-3 text-sm focus:outline-none" />
+             <button className="bg-sky-500 text-slate-900 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all">Subscribe</button>
+          </form>
         </div>
       </section>
-
-      <style jsx global>{`
-        @keyframes slow-zoom {
-          from { transform: scale(1); }
-          to { transform: scale(1.1); }
-        }
-        .animate-slow-zoom {
-          animation: slow-zoom 20s infinite alternate linear;
-        }
-      `}</style>
     </main>
   );
 }

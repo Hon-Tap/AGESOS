@@ -60,7 +60,7 @@ export default function ContactPage() {
             </span>
             Direct Support
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-[#0D1630] leading-[0.95] tracking-tight mb-6">
+          <h1 className="text-5xl md:text-6xl font-black text-[#0D1630] leading-[0.95] tracking-tight mb-6">
             Connecting <span className="text-[#60A0D2]">Global</span> support to <span className="text-slate-400">Local</span> action.
           </h1>
         </div>

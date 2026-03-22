@@ -1,7 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import Link from "next/link";
+
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Users, 
   Target, 
@@ -12,12 +15,14 @@ import {
   Sprout, 
   Droplets, 
   Scale, 
-  Maximize2,
   X,
-  ArrowRight
+  ArrowRight,
+  ArrowUpRight,
+  Plus,
+  Quote
 } from "lucide-react";
 
-// --- Types & Helpers ---
+// --- Types ---
 type Leader = {
   id: string;
   name: string;
@@ -27,72 +32,15 @@ type Leader = {
   photo: string;
 };
 
-function cx(...classes: Array<string | undefined | null | false>) {
-  return classes.filter(Boolean).join(" ");
-}
-
-function Eyebrow({ children, variant = "light" }: { children: React.ReactNode; variant?: "light" | "dark" }) {
-  return (
-    <div className={cx(
-      "inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest",
-      variant === "dark" ? "bg-white/10 text-blue-200 ring-1 ring-white/20" : "bg-blue-50 text-[#1F305E] ring-1 ring-blue-100"
-    )}>
-      <span className="h-1.5 w-1.5 rounded-full bg-[#60A0D2] animate-pulse" />
-      {children}
-    </div>
-  );
-}
-
-// --- Components ---
-
-function Modal({ open, title, onClose, children, maxWidth = "max-w-4xl" }: { 
-  open: boolean; 
-  title: string; 
-  onClose: () => void; 
-  children: React.ReactNode;
-  maxWidth?: string;
-}) {
-  useEffect(() => {
-    if (!open) return;
-    const onKeyDown = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", onKeyDown);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = "unset";
-    };
-  }, [open, onClose]);
-
-  if (!open) return null;
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[#0D1630]/95 backdrop-blur-xl" onClick={onClose} />
-      <div className={cx("relative w-full overflow-hidden rounded-[3rem] bg-white shadow-2xl animate-in fade-in zoom-in slide-in-from-bottom-8 duration-500", maxWidth)}>
-        <button onClick={onClose} className="absolute right-6 top-6 z-10 rounded-full bg-slate-100 p-3 text-slate-500 hover:bg-slate-200 transition-all">
-          <X size={24} />
-        </button>
-        <div className="max-h-[90vh] overflow-y-auto">{children}</div>
-      </div>
-    </div>
-  );
-}
-
-const ValueCard = ({ icon: Icon, title, desc }: { icon: any, title: string, desc: string }) => (
-  <div className="group relative rounded-[2.5rem] border border-slate-200 bg-white p-8 transition-all hover:border-[#60A0D2]/30 hover:shadow-2xl hover:-translate-y-2">
-    <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-[#60A0D2] group-hover:bg-[#60A0D2] group-hover:text-white transition-all duration-500">
-      <Icon size={28} />
-    </div>
-    <h4 className="text-xl font-bold text-[#0D1630]">{title}</h4>
-    <p className="mt-3 text-slate-600 leading-relaxed">{desc}</p>
+const SectionLabel = ({ children, light = false }: { children: React.ReactNode; light?: boolean }) => (
+  <div className={`flex items-center gap-3 mb-6 text-[11px] font-black uppercase tracking-[0.3em] ${light ? "text-sky-400" : "text-sky-600"}`}>
+    <span className={`h-px w-8 ${light ? "bg-sky-400" : "bg-sky-600"}`} />
+    {children}
   </div>
 );
 
-// --- Main Page ---
-
 export default function AboutPage() {
   const [activeLeader, setActiveLeader] = useState<Leader | null>(null);
-  const [isZoomed, setIsZoomed] = useState(false);
 
   const leadership: Leader[] = [
     {
@@ -100,7 +48,7 @@ export default function AboutPage() {
       name: "Tesloai Par Golong",
       role: "Executive Director",
       photo: "/images/executive-director.jpg",
-      bio: "As the lead visionary of AGE, the Executive Director oversees the entire organizational roadmap, ensuring that every humanitarian intervention aligns with our 2019 founding principles. They manage high-level partnerships with UN agencies and international donors to balance emergency response with long-term development.",
+      bio: "As the lead visionary of AGE, the Executive Director oversees the entire organizational roadmap, ensuring that every humanitarian intervention aligns with our 2019 founding principles. They manage high-level partnerships with UN agencies and international donors.",
       focus: ["Policy", "Fundraising", "External Relations"],
     },
     {
@@ -108,164 +56,219 @@ export default function AboutPage() {
       name: "Gatluak Kedok Jiek",
       role: "Director of Programs",
       photo: "/images/Bailuk.jpg", 
-      bio: "Responsible for the technical integrity of Education, Health, and WASH initiatives, the Director of Programs bridges the gap between Juba HQ and field offices in Jonglei and Warrap. They ensure programs reach their targets, including health awareness for 5,000+ students.",
+      bio: "Responsible for the technical integrity of Education, Health, and WASH initiatives, the Director of Programs bridges the gap between Juba HQ and field offices.",
       focus: ["Implementation", "Technical Oversight", "Field Logistics"],
     },
     {
-      id: "fam",
-      name: "[INSERT NAME]",
-      role: "Finance & Admin Manager",
+      id: "OM",
+      name: "Par Chuol",
+      role: "Operations Manager",
       photo: "/images/executive-director.jpg",
-      bio: "The backbone of AGE's transparency, the Finance and Admin Manager implements rigorous financial controls and audit-ready systems. They manage procurement and HR to ensure that donor funds create sustainable, community-owned impact.",
+      bio: "The Operations Manager ensures that our programs run smoothly on the ground, managing everything from procurement to HR and compliance with RRC regulations.",
       focus: ["Audit Compliance", "HR", "Procurement"],
     },
     {
+      id: "FAM",
+      name: "Name...",
+      role: "Finance & Admin Manager",
+      photo: "/images/executive-director.jpg",
+      bio: "The Finance & Admin Manager oversees the financial health and administrative efficiency of AGE, ensuring responsible stewardship of resources.",
+      focus: ["Budgeting", "Financial Reporting", "Admin Operations"],
+    },
+    {
       id: "mne",
-      name: "[INSERT NAME]",
+      name: "Name...",
       role: "M&E Coordinator",
       photo: "/images/Bailuk.jpg",
-      bio: "Data-driven and results-oriented, the M&E Coordinator tracks every metric from literacy classes to agricultural inputs. By building robust beneficiary feedback loops, they provide the empirical evidence needed to refine youth-led community initiatives.",
+      bio: "Data-driven and results-oriented, the M&E Coordinator tracks every metric from literacy classes to agricultural inputs.",
       focus: ["Data Analysis", "Reporting", "Knowledge Management"],
     }
   ];
 
   return (
-    <main className="relative min-h-screen bg-[#FDFDFD] text-slate-900">
+    <main className="min-h-screen bg-white text-slate-900 overflow-x-hidden">
       
-      {/* HERO SECTION */}
-      <section className="relative overflow-hidden bg-[#0D1630] pt-32 pb-24 lg:pt-48 lg:pb-40">
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-          <Image src="/images/age-logo.png" alt="" fill priority className="object-contain scale-150" />
+      {/* 1. REFINED FULL COVER HERO */}
+      <section className="relative min-h-[95vh] flex items-center pt-20 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/images/news/school-opening.jpeg" 
+            alt="Field Operations" 
+            fill 
+            className="object-cover scale-105"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-slate-900/70 to-transparent" />
         </div>
         
         <div className="container mx-auto max-w-7xl px-6 relative z-10">
-          <div className="max-w-4xl">
-            <Eyebrow variant="dark">Empowering South Sudan Since 2019</Eyebrow>
-            <h1 className="mt-8 text-6xl font-black tracking-tight text-white lg:text-8xl leading-[1.1]">
-              Standing for <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60A0D2] to-blue-400">Everyone.</span>
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="max-w-2xl"
+          >
+            <SectionLabel light>Humanitarian Action</SectionLabel>
+            <h1 className="text-6xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-6">
+              Empowering <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-sky-200">Generations.</span>
             </h1>
-            <p className="mt-8 text-xl lg:text-2xl leading-relaxed text-slate-300 max-w-2xl">
-              A National NGO dedicated to breaking cycles of poverty through integrated education, health, and sustainable livelihoods.
+            <p className="text-xl lg:text-2xl text-slate-300/90 font-light leading-relaxed tracking-wide">
+              Reshaping the future of South Sudan through integrated <span className="text-white font-medium">Education, Health, and Resilience.</span>
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* STATS OVERLAP */}
-      <section className="container mx-auto max-w-7xl px-6 -mt-16 relative z-20">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { label: "Established", value: "2019", icon: Globe },
-            { label: "Impact", value: "5,000+ Students", icon: Users },
-            { label: "Reach", value: "4+ States", icon: Target },
-            { label: "Status", value: "RRC Registered", icon: ShieldCheck },
-          ].map((stat, i) => (
-            <div key={i} className="flex flex-col gap-4 rounded-[2rem] bg-white p-8 shadow-2xl shadow-blue-900/10 ring-1 ring-slate-100">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-[#60A0D2]">
-                <stat.icon size={24} />
-              </div>
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{stat.label}</p>
-                <p className="mt-1 text-xl font-bold text-[#0D1630]">{stat.value}</p>
-              </div>
+            
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link href="/get-involved"></Link>
+               <button className="bg-sky-500 hover:bg-white text-slate-900 px-10 py-4 rounded-full text-[11px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-sky-500/20">
+                 Get Involved
+               </button>
+               <button id="mission" className="group flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-widest px-6 transition-all hover:text-sky-400">
+                 <span className="h-10 w-10 flex items-center justify-center rounded-full border border-white/20 group-hover:bg-white/10 group-hover:border-sky-400/50 transition-all">
+                   <Plus size={16} />
+                 </span>
+                 Our Mission
+               </button>
             </div>
-          ))}
+          </motion.div>
+        </div>
+
+        {/* --- REWRITTEN SLEEK STATS BAR --- */}
+        <div className="absolute bottom-2 left-0 right-0 z-20 hidden lg:block">
+          <div className="container mx-auto max-w-7xl px-6">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="flex items-center justify-between bg-slate-900/40 backdrop-blur-xl rounded-full border border-white/10 p-2 pl-12 pr-4 shadow-2xl"
+            >
+              {[
+                { label: "Established", value: "2019" },
+                { label: "Reach", value: "4 States" },
+                { label: "Impact", value: "100+ Students" },
+              ].map((stat, i) => (
+                <React.Fragment key={i}>
+                  <div className="py-4">
+                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-sky-400/80 mb-1">{stat.label}</p>
+                    <p className="text-xl font-bold text-white tracking-tight">{stat.value}</p>
+                  </div>
+                  {i < 2 && <div className="h-8 w-px bg-white/10" />}
+                </React.Fragment>
+              ))}
+              
+              <div className="bg-white/10 rounded-full px-8 py-4 border border-white/10 flex items-center gap-3">
+                <ShieldCheck className="text-sky-400" size={18} />
+                <span className="text-[10px] font-black uppercase tracking-widest text-white">RRC Registered</span>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* VISION & MISSION */}
-      <section className="container mx-auto max-w-7xl px-6 py-32">
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div className="group relative overflow-hidden rounded-[3.5rem] bg-[#0D1630] p-12 lg:p-16 text-white shadow-2xl transition-transform hover:scale-[1.01]">
-             <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:scale-110 transition-transform">
-               <Target size={160} />
-             </div>
-             <h2 className="text-4xl font-black mb-6">Our Vision</h2>
-             <p className="text-xl leading-relaxed text-blue-100/80 italic font-light">
-               "A South Sudan free from illiteracy and poverty, where every generation thrives through equitable access to education, health, and sustainable livelihoods."
-            </p>
-          </div>
-
-          <div className="group relative overflow-hidden rounded-[3.5rem] bg-[#60A0D2] p-12 lg:p-16 text-[#0D1630] shadow-2xl transition-transform hover:scale-[1.01]">
-             <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:scale-110 transition-transform">
-               <Globe size={160} />
-             </div>
-             <h2 className="text-4xl font-black mb-6">Our Mission</h2>
-             <p className="text-xl leading-relaxed font-semibold">
-               To work with communities in South Sudan, empowering them to reduce illiteracy and poverty through education, health, and sustainable livelihood programs.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* THEMATIC AREAS */}
-      <section className="bg-slate-50/50 py-32 border-y border-slate-100">
+      {/* 2. VISION & MISSION - EDITORIAL LAYOUT */}
+      <section className="py-32 bg-white relative">
         <div className="container mx-auto max-w-7xl px-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
-            <div className="max-w-2xl">
-              <Eyebrow>Impact Sectors</Eyebrow>
-              <h2 className="mt-4 text-5xl font-black text-[#0D1630]">Areas of Intervention</h2>
+          <div className="grid lg:grid-cols-2 gap-20 items-start">
+            <div className="sticky top-32">
+              <SectionLabel>Our Foundation</SectionLabel>
+              <h2 className="text-4xl lg:text-5xl font-black text-slate-900 mb-8">The Core of Our Action</h2>
+              <div className="relative p-10 bg-slate-50 rounded-[3rem] border border-slate-100">
+                <Quote className="text-sky-200 absolute top-8 right-4" size={30} />
+                <p className="text-2xl font-bold leading-snug text-slate-800 italic relative z-10">
+                  A South Sudan free from illiteracy and poverty, where every generation thrives through equitable access to education and health.
+                </p>
+                <p className="mt-6 text-sm font-black uppercase tracking-widest text-sky-600">— AGE Vision Statement</p>
+              </div>
             </div>
-            <p className="text-slate-500 font-medium max-w-xs">Integrated approaches to community development and emergency response.</p>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <ValueCard icon={BookOpen} title="Education" desc="Formal/non-formal schooling, TVET, teacher training, and literacy programs for the youth." />
-            <ValueCard icon={HeartPulse} title="Health & Nutrition" desc="Primary healthcare, maternal/child health, and management of acute malnutrition." />
-            <ValueCard icon={Sprout} title="Food Security (FSL)" desc="Agricultural inputs, vocational training, and income-generating activities for families." />
-            <ValueCard icon={Droplets} title="WASH" desc="Safe water supply, hygiene promotion, and emergency sanitation infrastructure." />
-            <ValueCard icon={Scale} title="Cross-cutting" desc="Focusing on gender mainstreaming, local peacebuilding, and climate resilience." />
-            <div className="flex flex-col justify-center rounded-[2.5rem] bg-[#0D1630] p-10 text-center text-white">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#60A0D2]">Active Operational Zones</p>
-              <h4 className="mt-4 text-2xl font-black leading-tight">Jonglei • Upper Nile • Unity • Warrap</h4>
-              <div className="mt-6 flex justify-center">
-                <div className="h-1 w-12 rounded-full bg-white/20" />
+            
+            <div className="space-y-16 pt-12">
+              <div>
+                <h3 className="text-2xl font-bold mb-6 flex items-center gap-4">
+                   <span className="h-10 w-10 rounded-xl bg-sky-600 text-white flex items-center justify-center font-black">01</span>
+                   Our Mission
+                </h3>
+                <p className="text-xl text-slate-600 leading-relaxed font-light">
+                  To work with communities in South Sudan, empowering them to reduce illiteracy and poverty through education, health, and sustainable livelihood programs.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="p-8 border border-slate-100 rounded-3xl">
+                   <Target className="text-sky-600 mb-4" />
+                   <h4 className="font-bold mb-2">Technical Excellence</h4>
+                   <p className="text-xs text-slate-500 leading-relaxed">Adhering to international humanitarian standards in every project.</p>
+                </div>
+                <div className="p-8 border border-slate-100 rounded-3xl">
+                   <Users className="text-sky-600 mb-4" />
+                   <h4 className="font-bold mb-2">Community Led</h4>
+                   <p className="text-xs text-slate-500 leading-relaxed">Programs designed and managed alongside local stakeholders.</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* LEADERSHIP SECTION */}
+      {/* 3. THEMATIC SECTORS - SLEEK CARDS */}
+      <section className="py-32 bg-slate-900 text-white">
+        <div className="container mx-auto max-w-7xl px-6">
+          <SectionLabel light>Areas of Intervention</SectionLabel>
+          <div className="grid md:grid-cols-3 gap-8 mt-12">
+            {[
+              { icon: BookOpen, title: "Education", list: ["TVET Training", "Teacher Support", "Youth Literacy"] },
+              { icon: HeartPulse, title: "Health & Nutrition", list: ["Primary Care", "Maternal Health", "Malnutrition"] },
+              { icon: Sprout, title: "Livelihoods (FSL)", list: ["Agri-Inputs", "Income Generation", "Small Business"] },
+              { icon: Droplets, title: "WASH", list: ["Water Supply", "Hygiene Kits", "Sanitation"] },
+              { icon: Scale, title: "Cross-cutting", list: ["Gender Equity", "Peacebuilding", "Climate"] },
+              { icon: Globe, title: "Operational States", list: ["Jonglei", "Upper Nile", "Unity", "Warrap"] },
+            ].map((sector, i) => (
+              <div key={i} className="group p-10 rounded-[2.5rem] bg-white/5 border border-white/10 hover:bg-sky-600 transition-all duration-500">
+                <sector.icon size={32} className="text-sky-400 group-hover:text-white mb-8 transition-colors" />
+                <h4 className="text-xl font-bold mb-6">{sector.title}</h4>
+                <ul className="space-y-3">
+                  {sector.list.map(item => (
+                    <li key={item} className="text-sm text-slate-400 group-hover:text-sky-100 flex items-center gap-2">
+                      <div className="h-1 w-1 bg-sky-500 group-hover:bg-white rounded-full" /> {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. CIRCULAR LEADERSHIP SECTION */}
       <section className="py-32 bg-white">
         <div className="container mx-auto max-w-7xl px-6">
-          <div className="text-center max-w-3xl mx-auto mb-24">
-            <Eyebrow>Our Team</Eyebrow>
-            <h2 className="mt-4 text-5xl font-black text-[#0D1630]">Driven by Shared Purpose</h2>
-            <p className="mt-6 text-lg text-slate-600">Our leadership combines deep technical expertise with lived experience in the communities we serve.</p>
+          <div className="text-center max-w-2xl mx-auto mb-24">
+            <SectionLabel>Our Leadership</SectionLabel>
+            <h2 className="text-4xl lg:text-5xl font-black text-slate-900">The People Behind the Impact</h2>
           </div>
 
-          <div className="space-y-12">
-            {leadership.map((person, idx) => (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-16">
+            {leadership.map((person) => (
               <div 
                 key={person.id}
                 onClick={() => setActiveLeader(person)}
-                className={cx(
-                  "group relative flex flex-col md:flex-row items-center gap-8 md:gap-16 cursor-pointer rounded-[3rem] p-4 transition-all hover:bg-slate-50",
-                  idx % 2 !== 0 && "md:flex-row-reverse"
-                )}
+                className="group cursor-pointer text-center"
               >
-                <div className="relative h-[400px] w-full md:w-1/2 overflow-hidden rounded-[2.5rem] shadow-xl">
-                  <Image 
-                    src={person.photo} 
-                    alt={person.name} 
-                    fill 
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0D1630]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative mx-auto w-48 h-48 lg:w-56 lg:h-56 mb-8">
+                  <div className="absolute inset-0 rounded-full border-2 border-dashed border-sky-200 group-hover:border-sky-500 group-hover:rotate-45 transition-all duration-1000" />
+                  <div className="absolute inset-3 rounded-full overflow-hidden border-4 border-white shadow-xl bg-slate-100">
+                    <Image 
+                      src={person.photo} 
+                      alt={person.name} 
+                      fill 
+                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500" 
+                    />
+                  </div>
+                  <div className="absolute bottom-2 right-2 h-10 w-10 bg-sky-600 text-white rounded-full flex items-center justify-center shadow-lg translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+                    <Plus size={20} />
+                  </div>
                 </div>
-                
-                <div className="w-full md:w-1/2 space-y-4 px-4">
-                  <span className="text-sm font-bold text-[#60A0D2] uppercase tracking-widest">{person.role}</span>
-                  <h3 className="text-4xl font-black text-[#0D1630]">{person.name}</h3>
-                  <p className="text-slate-600 line-clamp-3 text-lg leading-relaxed">
-                    {person.bio}
-                  </p>
-                  <button className="inline-flex items-center gap-2 font-bold text-[#0D1630] group/btn">
-                    Read Full Profile 
-                    <ArrowRight size={18} className="transition-transform group-hover/btn:translate-x-2" />
-                  </button>
+
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-sky-600">{person.role}</p>
+                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition-colors">{person.name}</h3>
                 </div>
               </div>
             ))}
@@ -273,100 +276,69 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* STRUCTURE SECTION */}
-      <section className="bg-[#0D1630] py-32 text-white overflow-hidden">
-        <div className="container mx-auto max-w-7xl px-6">
-          <div className="grid gap-16 lg:grid-cols-2 items-center">
-            <div className="space-y-8">
-              <Eyebrow variant="dark">Governance</Eyebrow>
-              <h2 className="text-5xl font-black leading-tight">Structure for <br />Accountability</h2>
-              <p className="text-xl text-slate-400 leading-relaxed">
-                Our hierarchical framework ensures transparency from the Board level down to field operations, fostering a culture of technical excellence.
-              </p>
-              <button 
-                onClick={() => setIsZoomed(true)}
-                className="group inline-flex items-center gap-3 rounded-full bg-[#60A0D2] px-8 py-4 text-sm font-bold text-white transition-all hover:bg-blue-400"
-              >
-                <Maximize2 size={20} />
-                View Detailed Org Chart
-              </button>
-            </div>
-            
-            <div 
-              onClick={() => setIsZoomed(true)}
-              className="group relative cursor-zoom-in rounded-[3rem] bg-white/5 p-4 ring-1 ring-white/10 backdrop-blur-sm transition-all hover:ring-white/30"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem]">
-                <Image 
-                  src="/org-structure.jpg" 
-                  alt="Org Structure Preview" 
-                  fill 
-                  className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* LEADER MODAL */}
-      <Modal 
-        open={!!activeLeader} 
-        title="" 
-        onClose={() => setActiveLeader(null)}
-      >
+      {/* 5. MODAL - REFINED GLASS UI */}
+      <AnimatePresence>
         {activeLeader && (
-          <div className="grid md:grid-cols-2">
-            <div className="relative h-[400px] md:h-full min-h-[500px]">
-              <Image 
-                src={activeLeader.photo} 
-                alt={activeLeader.name} 
-                fill 
-                className="object-cover"
-              />
-            </div>
-            <div className="p-10 lg:p-16 flex flex-col justify-center">
-              <Eyebrow>{activeLeader.role}</Eyebrow>
-              <h3 className="mt-4 text-4xl font-black text-[#0D1630]">{activeLeader.name}</h3>
-              <div className="mt-8 space-y-6">
-                <p className="text-lg leading-relaxed text-slate-600">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6"
+          >
+            <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-md" onClick={() => setActiveLeader(null)} />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-4xl bg-white rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row"
+            >
+              <button 
+                onClick={() => setActiveLeader(null)} 
+                className="absolute top-8 right-8 z-20 h-12 w-12 bg-slate-100 rounded-full flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all"
+              >
+                <X size={24} />
+              </button>
+              
+              <div className="w-full md:w-2/5 relative h-[350px] md:h-auto bg-slate-200">
+                <Image src={activeLeader.photo} alt="" fill className="object-cover" />
+              </div>
+              
+              <div className="w-full md:w-3/5 p-12 lg:p-16 flex flex-col justify-center">
+                <SectionLabel>{activeLeader.role}</SectionLabel>
+                <h3 className="text-4xl font-black mb-6 text-slate-900">{activeLeader.name}</h3>
+                <p className="text-lg text-slate-600 font-light leading-relaxed mb-8">
                   {activeLeader.bio}
                 </p>
-                <div>
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Core Focus Areas</h4>
+                <div className="space-y-4">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Expertise</p>
                   <div className="flex flex-wrap gap-2">
                     {activeLeader.focus.map(f => (
-                      <span key={f} className="rounded-full bg-slate-100 px-4 py-2 text-xs font-bold text-[#0D1630]">
+                      <span key={f} className="px-5 py-2 bg-sky-50 text-sky-700 rounded-full text-[10px] font-bold uppercase tracking-wider">
                         {f}
                       </span>
                     ))}
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
-      </Modal>
+      </AnimatePresence>
 
-      {/* ZOOMABLE STRUCTURE MODAL */}
-      <Modal 
-        open={isZoomed} 
-        title="Organizational Flow" 
-        onClose={() => setIsZoomed(false)}
-        maxWidth="max-w-6xl"
-      >
-        <div className="p-4 md:p-12">
-          <div className="relative aspect-[16/10] w-full">
-             <Image 
-              src="/org-structure.jpg" 
-              alt="Expanded Org Structure" 
-              fill 
-              className="object-contain"
-              priority
-            />
+      {/* 6. CALL TO ACTION */}
+      <section className="py-24 bg-sky-600">
+        <div className="container mx-auto max-w-7xl px-6 flex flex-col md:flex-row items-center justify-between gap-12">
+          <div className="text-white max-w-xl">
+            <h2 className="text-4xl font-black mb-4">Ready to collaborate?</h2>
+            <p className="text-sky-100 text-lg">Download our full organizational profile or reach out to our Juba headquarters for partnership inquiries.</p>
+          </div>
+          <div className="flex gap-4">
+            <button className="bg-white text-sky-600 px-10 py-5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all shadow-xl flex items-center gap-3">
+              Organization Profile <ArrowUpRight size={18} />
+            </button>
           </div>
         </div>
-      </Modal>
+      </section>
 
     </main>
   );
