@@ -93,7 +93,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">Official Email</p>
-                    <p className="text-base font-bold text-slate-900">contact@agesos.org</p>
+                    <p className="text-base font-bold text-slate-900">info@agesos.org</p>
                   </div>
                 </div>
 
