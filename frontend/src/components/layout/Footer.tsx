@@ -2,19 +2,44 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Mail, 
   Phone, 
   MapPin, 
   ArrowUpRight, 
-  Globe, 
   ShieldCheck,
   Facebook,
   Twitter,
   Linkedin,
-  MessageCircle
+  MessageCircle,
+  X,
+  Scale,
+  Lock,
+  FileCheck
 } from "lucide-react";
+
+// --- Types & Data ---
+type ModalType = "privacy" | "terms" | "compliance" | null;
+
+const LEGAL_CONTENT = {
+  privacy: {
+    title: "Privacy Policy",
+    icon: Lock,
+    text: "AGE South Sudan is committed to protecting the data of our donors, partners, and beneficiaries. We collect information solely for project implementation and transparency reporting. We never sell or share personal data with third-party commercial entities."
+  },
+  terms: {
+    title: "Terms of Use",
+    icon: Scale,
+    text: "By accessing our digital platforms, you agree to use our resources for humanitarian advocacy and informational purposes only. Unauthorized use of AGE field photography or intellectual property without written consent is strictly prohibited."
+  },
+  compliance: {
+    title: "NGO Compliance",
+    icon: FileCheck,
+    text: "AGE is fully registered with the Relief and Rehabilitation Commission (RRC) under Registration No. 2486. We adhere to the Core Humanitarian Standard (CHS) and maintain strict anti-fraud and PSEA (Protection from Sexual Exploitation and Abuse) policies."
+  }
+};
 
 // --- Sub-components ---
 function FooterLink({ href, children, external }: { href: string; children: React.ReactNode; external?: boolean }) {
@@ -50,6 +75,10 @@ function ContactItem({ icon: Icon, label, value, href }: { icon: any; label: str
 }
 
 export default function Footer() {
+  const [activeModal, setActiveModal] = useState<ModalType>(null);
+
+  const closeModal = () => setActiveModal(null);
+
   return (
     <footer className="relative bg-[#050810] pt-24 pb-12 overflow-hidden border-t border-white/5">
       {/* Background Glows */}
@@ -68,13 +97,13 @@ export default function Footer() {
                 <Image src="/age-logo.png" alt="AGE Logo" width={40} height={40} className="object-contain" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-white leading-none tracking-tight">AGE SOUTH SUDAN</h3>
+                <h3 className="text-lg font-black text-white leading-none tracking-tight uppercase">AGE South Sudan</h3>
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#60A0D2] mt-1">Generational Education</p>
               </div>
             </Link>
             
             <p className="text-slate-400 text-sm leading-relaxed max-w-sm mb-10">
-              A registered National NGO dedicated to bridging the gap in education, health, and sustainable livelihoods for the most remote communities in South Sudan.
+              Agency for Generational Education (AGE) is a registered National NGO dedicated to bridging the gap in education, health, and sustainable livelihoods for remote communities in South Sudan.
             </p>
 
             <div className="flex gap-3">
@@ -143,16 +172,7 @@ export default function Footer() {
                 href="tel:+211920009257"
               />
             </div>
-            
-            <div className="mt-6 flex items-center justify-between px-6 py-4 rounded-2xl bg-[#60A0D2]/5 border border-[#60A0D2]/10">
-               <div className="flex items-center gap-2 text-emerald-400 text-[10px] font-black uppercase tracking-widest">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Live Field Support
-               </div>
-               <Globe size={14} className="text-[#60A0D2] opacity-50" />
-            </div>
           </div>
-
         </div>
 
         {/* Bottom Bar */}
@@ -168,18 +188,65 @@ export default function Footer() {
           </div>
 
           <nav className="flex flex-wrap justify-center gap-x-8 gap-y-2">
-            {['Privacy', 'Terms', 'Compliance'].map((item) => (
-              <Link 
+            {(['Privacy', 'Terms', 'Compliance'] as const).map((item) => (
+              <button 
                 key={item} 
-                href={`/${item.toLowerCase()}`} 
+                onClick={() => setActiveModal(item.toLowerCase() as ModalType)}
                 className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-[#60A0D2] transition-colors"
               >
                 {item}
-              </Link>
+              </button>
             ))}
           </nav>
         </div>
       </div>
+
+      {/* Modal Overlay */}
+      <AnimatePresence>
+        {activeModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-md"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-lg bg-[#0D1630] border border-white/10 rounded-[2.5rem] p-8 shadow-2xl"
+            >
+              <button 
+                onClick={closeModal}
+                className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="flex flex-col items-center text-center">
+                <div className="h-16 w-16 rounded-2xl bg-[#60A0D2]/10 border border-[#60A0D2]/20 flex items-center justify-center text-[#60A0D2] mb-6">
+                  {React.createElement(LEGAL_CONTENT[activeModal].icon, { size: 32 })}
+                </div>
+                
+                <h3 className="text-xl font-black text-white uppercase tracking-tight mb-4">
+                  {LEGAL_CONTENT[activeModal].title}
+                </h3>
+                
+                <p className="text-slate-400 text-sm leading-relaxed mb-8">
+                  {LEGAL_CONTENT[activeModal].text}
+                </p>
+
+                <button 
+                  onClick={closeModal}
+                  className="w-full py-4 bg-white text-[#0D1630] rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#60A0D2] transition-colors"
+                >
+                  Close Document
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </footer>
   );
 }
