@@ -88,56 +88,76 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen bg-white text-slate-900 overflow-x-hidden">
       
-      {/* 1. REFINED FULL COVER HERO */}
-      <section className="relative min-h-[90vh] flex items-center pt-20 pb-32 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image 
-            src="/images/news/school-opening.jpeg" 
-            alt="Field Operations in South Sudan" 
-            fill 
-            className="object-cover scale-105"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-tr from-slate-900/95 via-slate-900/80 to-transparent" />
-        </div>
+      {/* 1. REFINED NGO LEADERSHIP HERO */}
+<section className="relative min-h-[95vh] flex items-center pt-24 pb-32 overflow-hidden">
+  {/* BACKGROUND LAYER */}
+  <div className="absolute inset-0 z-0">
+    <Image 
+      src="/images/news/school-opening.jpeg" 
+      alt="AGE Field Operations in South Sudan" 
+      fill 
+      className="object-cover scale-105"
+      priority
+    />
+    {/* Sophisticated dual-layer gradient for maximum text legibility */}
+    <div className="absolute inset-0 bg-slate-950/60" />
+    <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
+  </div>
+  
+  <div className="container mx-auto max-w-7xl px-6 relative z-10">
+    <motion.div 
+      initial={{ opacity: 0, x: -30 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.9, ease: "easeOut" }}
+      className="max-w-4xl"
+    >
+      <SectionLabel light>National NGO • Established 2019</SectionLabel>
+      
+      <h1 className="mt-8 text-5xl lg:text-8xl font-black text-white leading-[1.05] tracking-tight">
+        Advancing <span className="text-sky-400">Education.</span> <br/>
+        Restoring <span className="text-sky-400">Resilience.</span>
+      </h1>
+      
+      <p className="mt-8 text-lg lg:text-2xl text-slate-200 font-light leading-relaxed max-w-2xl">
+        AGE South Sudan is a registered national NGO dedicated to bridging the gap between 
+        <span className="text-white font-medium"> emergency relief</span> and 
+        <span className="text-white font-medium"> sustainable development</span> through 
+        community-led health, education, and WASH initiatives.
+      </p>
+      
+      <div className="mt-12 flex flex-col sm:flex-row items-center gap-8">
+        {/* CONSOLIDATED PRIMARY CTA */}
+        <Link 
+          href="/get-involved"
+          className="group relative w-full sm:w-auto inline-flex items-center justify-center bg-sky-500 hover:bg-white text-slate-950 px-10 py-5 rounded-full text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-300 hover:scale-105 active:scale-95"
+        >
+          Partner With Us
+          <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
+        </Link>
         
-        <div className="container mx-auto max-w-7xl px-6 relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-3xl"
-          >
-            <SectionLabel light>Humanitarian Action</SectionLabel>
-            <h1 className="text-5xl lg:text-7xl font-black text-white leading-[1.1] tracking-tighter mb-6">
-              Rebuilding Lives. <br/>
-              Empowering <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-sky-200">Generations.</span>
-            </h1>
-            <p className="text-lg lg:text-xl text-slate-300 font-light leading-relaxed tracking-wide mb-10 max-w-2xl">
-              AGE South Sudan is a national NGO reshaping the future of our communities through integrated <span className="text-white font-medium">Education, Health, and Livelihood Resilience.</span>
-            </p>
-            
-            {/* FIXED: Proper Next.js Link Usage */}
-            <div className="flex flex-wrap items-center gap-6">
-              <Link 
-                href="/get-involved"
-                className="inline-flex items-center justify-center bg-sky-500 hover:bg-white text-white hover:text-slate-900 px-10 py-4 rounded-full text-[11px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg shadow-sky-500/30"
-              >
-                Get Involved
-              </Link>
-              <a 
-                href="#mission" 
-                className="group flex items-center gap-3 text-white text-[11px] font-black uppercase tracking-widest px-4 transition-all hover:text-sky-400"
-              >
-                <span className="h-10 w-10 flex items-center justify-center rounded-full border border-white/20 group-hover:bg-white/10 group-hover:border-sky-400/50 transition-all">
-                  <ArrowRight size={16} />
-                </span>
-                Discover Our Impact
-              </a>
-            </div>
-          </motion.div>
+        {/* SECONDARY SCROLL ANCHOR */}
+        <Link 
+          href="#impact-stats" 
+          className="text-white/70 hover:text-sky-400 text-[10px] font-black uppercase tracking-[0.3em] transition-colors border-b border-white/10 pb-1 hover:border-sky-400/50"
+        >
+          Explore Our Field Impact
+        </Link>
+      </div>
+
+      {/* QUICK BADGES FOR TRUST */}
+      <div className="mt-16 flex flex-wrap gap-6 border-t border-white/10 pt-10 opacity-70">
+        <div className="flex items-center gap-3">
+          <div className="h-1 w-6 bg-sky-500" />
+          <span className="text-[10px] font-bold text-white uppercase tracking-widest">RRC Certified</span>
         </div>
-      </section>
+        <div className="flex items-center gap-3">
+          <div className="h-1 w-6 bg-sky-500" />
+          <span className="text-[10px] font-bold text-white uppercase tracking-widest">SPHERE Standard Aligned</span>
+        </div>
+      </div>
+    </motion.div>
+  </div>
+</section>
 
       {/* 1B. REWRITTEN & VISUALLY APPEALING IMPACT STATS (Overlapping design) */}
       <div className="relative z-20 -mt-20 px-6">
