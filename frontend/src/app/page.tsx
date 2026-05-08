@@ -217,10 +217,10 @@ export default function Home() {
               </motion.div>
 
               <motion.h1 variants={fadeInUp} className={`${outfit.className} text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.1] tracking-tight`}>
-                Communities First.
+                Standing for
                 <br />
                 <span className="text-sky-400">
-                  Generations Empowered.
+                  Everyone
                 </span>
               </motion.h1>
 
@@ -273,53 +273,6 @@ export default function Home() {
             backgroundSize: "50%",
           }}
         />
-
-        {/* --- VISION & MISSION SECTION --- */}
-        <section className="relative z-10 py-24 sm:py-32 border-b border-slate-200">
-          <div className="relative mx-auto max-w-7xl px-6">
-            <div className="text-center max-w-3xl mx-auto mb-20">
-              <motion.h2
-                initial="hidden" whileInView="visible" variants={fadeInUp} viewport={{ once: true, margin: "-100px" }}
-                className={`${outfit.className} text-4xl sm:text-5xl font-bold text-blue-950`}
-              >
-                Driving Real Change
-              </motion.h2>
-              <motion.p
-                initial="hidden" whileInView="visible" variants={fadeInUp} viewport={{ once: true }}
-                className={`${inter.className} mt-6 text-lg sm:text-xl text-slate-600 leading-relaxed`}
-              >
-                Building the future, one community at a time through strategic partnerships and grassroots local leadership.
-              </motion.p>
-            </div>
-
-            <div className="grid gap-8 md:grid-cols-3">
-              {[
-                { title: "Our Vision", icon: "👁️", text: "A resilient South Sudan where communities have equal access to education, healthcare, and sustainable opportunities." },
-                { title: "Our Mission", icon: "🎯", text: "Delivering community-led programs that empower people with the tools, knowledge, and resources to shape their own future." },
-                { title: "Our Impact", icon: "🌱", text: "Through strategic partnerships and grassroots local leadership, we are creating long-term, scalable generational change." },
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  className="group relative rounded-2xl bg-white p-8 md:p-10 shadow-sm border border-slate-200 transition-all duration-300 hover:-translate-y-2 hover:bg-blue-950 hover:border-blue-950 hover:shadow-xl z-10"
-                >
-                  <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-sky-50 text-2xl shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:bg-white/10">
-                    {item.icon}
-                  </div>
-                  <h3 className={`${outfit.className} mb-4 text-2xl font-bold text-blue-950 group-hover:text-white transition-colors`}>
-                    {item.title}
-                  </h3>
-                  <p className={`${inter.className} text-slate-600 group-hover:text-slate-300 transition-colors leading-relaxed`}>
-                    {item.text}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* --- PROGRAMS SECTION --- */}
         <section className="relative z-10 py-24 sm:py-32 bg-slate-100 border-b border-slate-200">

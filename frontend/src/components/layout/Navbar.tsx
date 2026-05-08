@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import { MapPin, Mail, Phone } from "lucide-react";
 
 function cn(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(" ");
@@ -39,10 +40,6 @@ const NAV_ITEMS = [
   },
 ];
 
-/**
- * FIXED VARIANTS
- * Explicitly typed as Variants to solve the Index Signature error
- */
 const overlayVariants: Variants = {
   closed: { opacity: 0 },
   open: { opacity: 1 },
@@ -82,7 +79,7 @@ export default function Navbar() {
   const isHomePage = pathname === "/";
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -105,17 +102,58 @@ export default function Navbar() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-[100] w-full transition-all duration-300",
+          "fixed inset-x-0 top-0 z-[100] w-full transition-all duration-500",
           isScrolled || !isHomePage
-            ? "bg-white/95 border-b border-slate-200 py-3 backdrop-blur-md shadow-sm"
-            : "bg-transparent py-5"
+            ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200"
+            : "bg-transparent"
         )}
       >
-        <div className="container mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8">
-          
+        {/* TOP CONTACT BAR - "Masquerade Motion" (Hides on Scroll) */}
+        <motion.div
+          initial={{ height: "auto", opacity: 1 }}
+          animate={{
+            height: isScrolled ? 0 : "auto",
+            opacity: isScrolled ? 0 : 1,
+          }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
+          className={cn(
+            "hidden lg:block overflow-hidden border-b transition-colors duration-300",
+            isHomePage ? "border-white/10 text-white/80" : "border-slate-200 text-slate-500"
+          )}
+        >
+          <div className="container mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-2.5 text-[10px] font-black uppercase tracking-[0.15em]">
+            <div className="flex items-center gap-6">
+              <span className="flex items-center gap-2 hover:text-sky-400 transition-colors cursor-default">
+                <MapPin size={12} className="text-sky-500" />
+                Juba HQ, Central Equatoria, South Sudan
+              </span>
+            </div>
+            <div className="flex items-center gap-6">
+              <a href="mailto:contact@age-southsudan.org" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
+                <Mail size={12} className="text-sky-500" />
+                contact@age-southsudan.org
+              </a>
+              <a href="tel:+211920009257" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
+                <Phone size={12} className="text-sky-500" />
+                +211 920 009 257
+              </a>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* MAIN NAVBAR */}
+        <div
+          className={cn(
+            "container mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 transition-all duration-500",
+            isScrolled ? "py-3 lg:py-4" : "py-5 lg:py-8"
+          )}
+        >
           {/* LOGO SECTION */}
-          <Link href="/" className="group relative z-[110] flex items-center gap-3">
-            <div className="relative h-11 w-11 overflow-hidden rounded-lg bg-white p-1 shadow-sm border border-slate-100 transition-transform group-hover:scale-105">
+          <Link href="/" className="group relative z-[110] flex items-center gap-4">
+            <div className={cn(
+              "relative overflow-hidden rounded-xl bg-white p-1 shadow-sm border border-slate-100 transition-all duration-500 group-hover:scale-105 group-hover:shadow-md",
+              isScrolled ? "h-11 w-11" : "h-12 w-12 lg:h-14 lg:w-14"
+            )}>
               <Image
                 src="/age-logo.png"
                 alt="AGE Logo"
@@ -124,23 +162,27 @@ export default function Navbar() {
                 priority
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col justify-center">
               <span
                 className={cn(
-                  "text-lg font-black tracking-tight transition-colors leading-tight",
+                  "font-black tracking-tight transition-all duration-500 leading-none mb-1",
+                  isScrolled ? "text-lg" : "text-xl",
                   isScrolled || !isHomePage ? "text-slate-900" : "text-white"
                 )}
               >
                 AGE <span className="text-sky-600">South Sudan</span>
               </span>
-              <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-slate-400">
+              <span className={cn(
+                "text-[9px] font-bold uppercase tracking-[0.15em] transition-colors duration-500",
+                isScrolled || !isHomePage ? "text-slate-500" : "text-white/70"
+              )}>
                 Agency for Generational Education
               </span>
             </div>
           </Link>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1.5">
             {NAV_ITEMS.map((item) => (
               <div
                 key={item.label}
@@ -151,10 +193,10 @@ export default function Navbar() {
                 {item.items ? (
                   <button
                     className={cn(
-                      "group flex items-center gap-1.5 px-4 py-2 text-sm font-bold transition-all",
+                      "group flex items-center gap-1.5 px-4 py-2.5 text-[13px] font-bold tracking-wide transition-all rounded-full",
                       isScrolled || !isHomePage
-                        ? "text-slate-600 hover:text-slate-900"
-                        : "text-white/90 hover:text-white"
+                        ? "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                        : "text-white/90 hover:text-white hover:bg-white/10"
                     )}
                   >
                     {item.label}
@@ -175,17 +217,17 @@ export default function Navbar() {
                   <Link
                     href={item.href!}
                     className={cn(
-                      "relative flex px-4 py-2 text-sm font-bold transition-all",
+                      "relative flex px-4 py-2.5 text-[13px] font-bold tracking-wide transition-all rounded-full",
                       isScrolled || !isHomePage
-                        ? "text-slate-600 hover:text-slate-900"
-                        : "text-white/90 hover:text-white"
+                        ? "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                        : "text-white/90 hover:text-white hover:bg-white/10"
                     )}
                   >
                     {item.label}
                     {isActive(item.href!) && (
                       <motion.span 
                         layoutId="activeNav"
-                        className="absolute bottom-0 left-1/2 h-0.5 w-4 -translate-x-1/2 bg-sky-500 rounded-full" 
+                        className="absolute bottom-1 left-1/2 h-[3px] w-5 -translate-x-1/2 bg-sky-500 rounded-full" 
                       />
                     )}
                   </Link>
@@ -194,20 +236,20 @@ export default function Navbar() {
                 <AnimatePresence>
                   {item.items && hoveredNav === item.label && (
                     <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                      initial={{ opacity: 0, y: 15, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.98 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute left-0 top-full mt-2 w-56 overflow-hidden rounded-xl border border-slate-100 bg-white p-2 shadow-xl ring-1 ring-black/5"
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute left-1/2 top-full mt-2 w-64 -translate-x-1/2 overflow-hidden rounded-2xl border border-slate-100 bg-white p-2.5 shadow-2xl ring-1 ring-black/5"
                     >
                       {item.items.map((subItem) => (
                         <Link
                           key={subItem.href}
                           href={subItem.href}
                           className={cn(
-                            "block rounded-md px-4 py-2.5 text-sm font-semibold transition-all",
+                            "block rounded-xl px-4 py-3 text-[13px] font-bold transition-all",
                             isActive(subItem.href)
-                              ? "bg-slate-50 text-sky-600"
+                              ? "bg-sky-50 text-sky-600"
                               : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                           )}
                         >
@@ -221,11 +263,11 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* RIGHT ACTIONS */}
+          {/* RIGHT CTA & MOBILE TOGGLE */}
           <div className="flex items-center gap-5">
             <Link
               href="/get-involved#donate"
-              className="hidden lg:inline-flex items-center rounded-full bg-sky-500 px-6 py-2.5 text-xs font-black tracking-widest uppercase text-white transition-all hover:bg-sky-600 hover:scale-105 active:scale-95 shadow-lg shadow-sky-500/20"
+              className="hidden lg:inline-flex items-center rounded-full bg-sky-500 px-7 py-3.5 text-[11px] font-black tracking-widest uppercase text-white transition-all duration-300 hover:bg-sky-600 hover:scale-105 active:scale-95 shadow-lg shadow-sky-500/30"
             >
               Donate Now
             </Link>
@@ -264,7 +306,7 @@ export default function Navbar() {
               exit="closed"
               variants={overlayVariants}
               onClick={() => setMobileOpen(false)}
-              className="fixed inset-0 z-[140] bg-slate-900/40 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-[140] bg-slate-900/60 backdrop-blur-sm lg:hidden"
             />
 
             <motion.div
@@ -272,9 +314,9 @@ export default function Navbar() {
               animate="open"
               exit="closed"
               variants={drawerVariants}
-              className="fixed bottom-0 right-0 top-0 z-[150] flex w-3/4 max-w-[320px] flex-col bg-slate-950 text-white shadow-2xl lg:hidden"
+              className="fixed bottom-0 right-0 top-0 z-[150] flex w-[80%] max-w-[340px] flex-col bg-slate-950 text-white shadow-2xl lg:hidden"
             >
-              <div className="flex-1 overflow-y-auto pb-24 pt-24 px-8">
+              <div className="flex-1 overflow-y-auto pb-32 pt-28 px-8">
                 <motion.nav
                   variants={staggerVariants}
                   initial="closed"
@@ -284,11 +326,11 @@ export default function Navbar() {
                   {NAV_ITEMS.map((item) => (
                     <motion.div key={item.label} variants={itemVariants}>
                       {item.items ? (
-                        <div className="flex flex-col gap-3">
-                          <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
+                        <div className="flex flex-col gap-4">
+                          <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-sky-500">
                             {item.label}
                           </h3>
-                          <div className="flex flex-col gap-3 border-l border-white/10 pl-4">
+                          <div className="flex flex-col gap-4 border-l-2 border-white/10 pl-5">
                             {item.items.map((subItem) => (
                               <Link
                                 key={subItem.href}
@@ -297,8 +339,8 @@ export default function Navbar() {
                                 className={cn(
                                   "text-lg font-bold transition-colors",
                                   isActive(subItem.href)
-                                    ? "text-sky-400"
-                                    : "text-slate-200 hover:text-white"
+                                    ? "text-white"
+                                    : "text-slate-400 hover:text-white"
                                 )}
                               >
                                 {subItem.label}
@@ -325,11 +367,20 @@ export default function Navbar() {
                 </motion.nav>
               </div>
 
-              <div className="absolute bottom-0 left-0 w-full border-t border-white/10 bg-slate-950/90 p-6 backdrop-blur-md">
+              {/* Mobile Contact & CTA */}
+              <div className="absolute bottom-0 left-0 w-full border-t border-white/10 bg-slate-950/90 p-6 backdrop-blur-xl">
+                <div className="mb-6 flex flex-col gap-3 text-xs font-medium text-slate-400">
+                  <a href="mailto:contact@age-southsudan.org" className="flex items-center gap-3">
+                    <Mail size={14} className="text-sky-500" /> contact@age-southsudan.org
+                  </a>
+                  <a href="tel:+211920009257" className="flex items-center gap-3">
+                    <Phone size={14} className="text-sky-500" /> +211 920 009 257
+                  </a>
+                </div>
                 <Link
                   href="/get-involved#donate"
                   onClick={() => setMobileOpen(false)}
-                  className="flex w-full items-center justify-center rounded-xl bg-sky-500 py-4 text-sm font-black uppercase tracking-widest text-white transition-transform active:scale-95"
+                  className="flex w-full items-center justify-center rounded-xl bg-sky-500 py-4 text-[13px] font-black uppercase tracking-widest text-white transition-transform active:scale-95 shadow-lg shadow-sky-500/20"
                 >
                   Donate Now
                 </Link>
