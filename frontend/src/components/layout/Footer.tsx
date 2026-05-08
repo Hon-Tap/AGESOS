@@ -133,8 +133,8 @@ export default function Footer() {
               <ContactItem 
                 icon={Mail} 
                 label="Official Correspondence" 
-                value="contact@age-southsudan.org" 
-                href="mailto:contact@age-southsudan.org"
+                value="info@agesos.org" 
+                href="mailto:info@agesos.org"
               />
               <ContactItem 
                 icon={Phone} 

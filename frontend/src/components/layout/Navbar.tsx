@@ -129,9 +129,9 @@ export default function Navbar() {
               </span>
             </div>
             <div className="flex items-center gap-6">
-              <a href="mailto:contact@age-southsudan.org" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
+              <a href="mailto:info@agesos.org" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
                 <Mail size={12} className="text-sky-500" />
-                contact@age-southsudan.org
+                info@agesos.org
               </a>
               <a href="tel:+211920009257" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
                 <Phone size={12} className="text-sky-500" />
