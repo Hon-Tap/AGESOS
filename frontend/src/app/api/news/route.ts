@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Initialize Resend with a fallback to prevent build-time crashes
-const resend = new Resend(process.env.RESEND_API_KEY || 're_61KKpEdE_PAFKkgtLze4M2mtCu6SETMyB');
+// Initialize Resend with the environment variable from Vercel
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
@@ -17,27 +17,36 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Logic: Send Email via Resend
+    // 2. Logic: Send Email via your verified info@agesos.org address
     const { data, error } = await resend.emails.send({
-      from: 'AGESOS Web <onboarding@resend.dev>', 
+      // Using info@agesos.org as the authorized sender
+      from: 'AGESOS Contact <info@agesos.org>', 
       to: ['info@agesos.org'],
       subject: `New Inquiry: ${inquiryType} from ${name}`,
-      replyTo: email,
+      replyTo: email, // This allows you to click "Reply" and email the visitor directly
       html: `
         <div style="font-family: sans-serif; padding: 20px; color: #333; line-height: 1.6;">
-          <h2 style="color: #0ea5e9;">New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Inquiry Type:</strong> ${inquiryType}</p>
-          <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
-          <p><strong>Message:</strong></p>
-          <p style="white-space: pre-wrap; background: #f8fafc; padding: 15px; rounded: 8px;">${message}</p>
+          <h2 style="color: #0ea5e9; border-bottom: 2px solid #0ea5e9; padding-bottom: 10px;">
+            New Contact Form Submission
+          </h2>
+          <div style="margin-top: 20px;">
+            <p><strong>Sender Name:</strong> ${name}</p>
+            <p><strong>Sender Email:</strong> ${email}</p>
+            <p><strong>Category:</strong> ${inquiryType}</p>
+          </div>
+          <div style="margin-top: 30px; padding: 20px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <p style="margin-bottom: 10px; font-weight: bold; color: #64748b; text-transform: uppercase; font-size: 12px;">Message:</p>
+            <p style="white-space: pre-wrap; color: #1e293b;">${message}</p>
+          </div>
+          <footer style="margin-top: 40px; font-size: 12px; color: #94a3b8;">
+            Sent automatically from AGESOS Web Portal
+          </footer>
         </div>
       `,
     });
 
     if (error) {
-      console.error("Resend Error:", error);
+      console.error("Resend Operational Error:", error);
       return NextResponse.json({ error }, { status: 500 });
     }
 
@@ -47,7 +56,7 @@ export async function POST(request: Request) {
     );
 
   } catch (err) {
-    console.error("API Route Error:", err);
+    console.error("API Route Critical Failure:", err);
     return NextResponse.json(
       { error: "Internal Server Error" }, 
       { status: 500 }
