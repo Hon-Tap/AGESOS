@@ -190,7 +190,7 @@ export default function ContactPage() {
                     </div>
                     <h2 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter">Transmission Successful</h2>
                     <p className="text-slate-500 text-lg max-w-md mb-12 font-medium leading-relaxed">
-                      Your message has been routed to <span className="text-sky-600 font-bold">contact@agesos.org</span>. Our Juba team typically responds within 24–48 business hours.
+                      Your message has been routed to <span className="text-sky-600 font-bold">info@agesos.org</span>. Our Juba team typically responds within 24–48 business hours.
                     </p>
                     <button 
                       onClick={() => setSubmitted(false)}

@@ -74,14 +74,6 @@ export default function AboutPage() {
       bio: "Nyadouth directs the financial architecture of AGE, specializing in meticulous budgeting, fiscal planning, and transparent accountability.",
       focus: ["Fiscal Stewardship", "Audit Accountability", "Resource Management"],
     },
-    {
-      id: "om",
-      name: "Par Chuol",
-      role: "Operations Manager",
-      photo: "/images/executive-director.jpg",
-      bio: "A specialist in organizational efficiency, Par manages the complex logistical framework of AGE from HR to RRC compliance.",
-      focus: ["Logistics", "Regulatory Compliance", "Human Resources"],
-    },
   ];
 
   return (
