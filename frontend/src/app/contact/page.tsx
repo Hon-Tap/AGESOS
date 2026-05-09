@@ -16,18 +16,33 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(false);
 
-    // This is set up to eventually integrate with Formspree or a custom API route
-    // that sends mail directly to contact@agesos.org
+    const formData = new FormData(e.currentTarget);
+    
     try {
-      await new Promise(r => setTimeout(r, 2000)); // Simulated delay
-      setSubmitted(true);
-    } catch (error) {
-      console.error("Transmission failed", error);
+      // Replace 'YOUR_FORMSPREE_ID' with your actual ID from formspree.io
+      const response = await fetch("https://formspree.io/f/YOUR_FORMSPREE_ID", {
+        method: "POST",
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        setError(true);
+      }
+    } catch (err) {
+      console.error("Transmission failed", err);
+      setError(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -146,17 +161,17 @@ export default function ContactPage() {
                     <div className="grid md:grid-cols-2 gap-8">
                       <div className="space-y-3">
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Full Identity</label>
-                        <input required type="text" placeholder="John Doe" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-bold text-slate-900 placeholder:text-slate-300" />
+                        <input required name="name" type="text" placeholder="John Doe" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-bold text-slate-900 placeholder:text-slate-300" />
                       </div>
                       <div className="space-y-3">
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Email for Response</label>
-                        <input required type="email" placeholder="john@example.com" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-bold text-slate-900 placeholder:text-slate-300" />
+                        <input required name="email" type="email" placeholder="john@example.com" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-bold text-slate-900 placeholder:text-slate-300" />
                       </div>
                     </div>
 
                     <div className="space-y-3">
                       <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Nature of Inquiry</label>
-                      <select className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-bold text-slate-900 appearance-none cursor-pointer">
+                      <select name="inquiryType" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-bold text-slate-900 appearance-none cursor-pointer">
                         <option>Program Partnerships</option>
                         <option>International Volunteering</option>
                         <option>Donation & Financial Inquiries</option>
@@ -167,8 +182,12 @@ export default function ContactPage() {
 
                     <div className="space-y-3">
                       <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Message Detail</label>
-                      <textarea required rows={6} placeholder="How can we collaborate or support your goals?" className="w-full bg-slate-50 border border-slate-200 rounded-[2rem] px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-medium text-slate-900 resize-none placeholder:text-slate-300" />
+                      <textarea required name="message" rows={6} placeholder="How can we collaborate or support your goals?" className="w-full bg-slate-50 border border-slate-200 rounded-[2rem] px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-medium text-slate-900 resize-none placeholder:text-slate-300" />
                     </div>
+
+                    {error && (
+                      <p className="text-red-500 text-xs font-bold uppercase tracking-wider text-center">Transmission Failed. Please check your connection.</p>
+                    )}
 
                     <button 
                       disabled={isSubmitting}
@@ -188,7 +207,7 @@ export default function ContactPage() {
                     <div className="w-24 h-24 bg-sky-50 text-sky-500 rounded-[2rem] flex items-center justify-center mb-8 border border-sky-100 shadow-inner">
                       <CheckCircle2 size={48} />
                     </div>
-                    <h2 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter">Transmission Successful</h2>
+                    <h2 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter">Send Successfully</h2>
                     <p className="text-slate-500 text-lg max-w-md mb-12 font-medium leading-relaxed">
                       Your message has been routed to <span className="text-sky-600 font-bold">info@agesos.org</span>. Our Juba team typically responds within 24–48 business hours.
                     </p>
@@ -203,7 +222,6 @@ export default function ContactPage() {
               </AnimatePresence>
             </div>
           </div>
-
         </div>
       </section>
     </main>
