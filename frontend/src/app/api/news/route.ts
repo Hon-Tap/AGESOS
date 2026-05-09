@@ -1,16 +1,12 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resendApiKey = process.env.RESEND_API_KEY;
-
-if (!resendApiKey) {
-  throw new Error("Missing RESEND_API_KEY in environment variables.");
-}
-
-const resend = new Resend(resendApiKey);
+// Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
+    // Parse request body
     const body = await request.json();
 
     const {
@@ -20,18 +16,21 @@ export async function POST(request: Request) {
       message,
     } = body;
 
-    // Basic Validation
+    // =========================
+    // VALIDATION
+    // =========================
+
     if (!name || !email || !message) {
       return NextResponse.json(
         {
           success: false,
-          error: "Name, email, and message are required.",
+          error: "All required fields must be filled.",
         },
         { status: 400 }
       );
     }
 
-    // Email Validation
+    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
@@ -44,13 +43,12 @@ export async function POST(request: Request) {
       );
     }
 
+    // =========================
     // SEND EMAIL
-    const { data, error } = await resend.emails.send({
-      // TEMPORARY TESTING SENDER
-      // Change this back after verifying agesos.org in Resend
-      from: "AGESOS Contact <onboarding@resend.dev>",
+    // =========================
 
-      // Your receiving email
+    const { data, error } = await resend.emails.send({
+      from: "AGESOS Contact <info@agesos.org>",
       to: ["info@agesos.org"],
 
       subject: `New Inquiry: ${inquiryType} from ${name}`,
@@ -58,25 +56,25 @@ export async function POST(request: Request) {
       replyTo: email,
 
       html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px; color: #0f172a; line-height: 1.7;">
-          
+        <div style="font-family: Arial, sans-serif; padding: 24px; color: #0f172a; line-height: 1.7;">
+
           <h2 style="color: #0ea5e9; margin-bottom: 20px;">
             New Contact Form Submission
           </h2>
 
           <table style="width: 100%; border-collapse: collapse;">
             <tr>
-              <td style="padding: 8px 0;"><strong>Name:</strong></td>
+              <td style="padding: 8px 0; font-weight: bold;">Sender Name:</td>
               <td>${name}</td>
             </tr>
 
             <tr>
-              <td style="padding: 8px 0;"><strong>Email:</strong></td>
+              <td style="padding: 8px 0; font-weight: bold;">Sender Email:</td>
               <td>${email}</td>
             </tr>
 
             <tr>
-              <td style="padding: 8px 0;"><strong>Inquiry Type:</strong></td>
+              <td style="padding: 8px 0; font-weight: bold;">Inquiry Type:</td>
               <td>${inquiryType}</td>
             </tr>
           </table>
@@ -85,7 +83,7 @@ export async function POST(request: Request) {
             style="
               margin-top: 30px;
               padding: 20px;
-              background: #f8fafc;
+              background-color: #f8fafc;
               border: 1px solid #e2e8f0;
               border-radius: 10px;
             "
@@ -102,12 +100,12 @@ export async function POST(request: Request) {
               Message
             </p>
 
-            <p style="white-space: pre-wrap;">
+            <p style="white-space: pre-wrap; margin: 0;">
               ${message}
             </p>
           </div>
 
-          <p
+          <footer
             style="
               margin-top: 40px;
               font-size: 12px;
@@ -115,13 +113,16 @@ export async function POST(request: Request) {
             "
           >
             Sent automatically from the AGESOS website.
-          </p>
+          </footer>
 
         </div>
       `,
     });
 
-    // RESEND ERROR
+    // =========================
+    // HANDLE RESEND ERRORS
+    // =========================
+
     if (error) {
       console.error("Resend Error:", error);
 
@@ -129,14 +130,16 @@ export async function POST(request: Request) {
         {
           success: false,
           error:
-            error.message ||
-            "Failed to send email. Please verify your domain in Resend.",
+            error.message || "Failed to send email. Please try again.",
         },
         { status: 500 }
       );
     }
 
-    // SUCCESS
+    // =========================
+    // SUCCESS RESPONSE
+    // =========================
+
     return NextResponse.json(
       {
         success: true,
@@ -158,9 +161,10 @@ export async function POST(request: Request) {
   }
 }
 
+// Health Check Route
 export async function GET() {
   return NextResponse.json({
     success: true,
-    status: "Contact API is running.",
+    status: "AGESOS Contact API is running.",
   });
 }
