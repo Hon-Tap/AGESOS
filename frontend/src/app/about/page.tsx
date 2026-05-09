@@ -266,16 +266,21 @@ export default function AboutPage() {
       </AnimatePresence>
 
       {/* 6. CALL TO ACTION */}
-      <section className="py-20 bg-sky-600 text-white text-center">
-        <div className="container mx-auto px-6">
-          <h2 className="text-2xl font-black mb-4">Partner With AGE South Sudan</h2>
-          <p className="text-sky-100 mb-8 max-w-xl mx-auto text-sm">Download our full organizational profile or reach out to our Juba headquarters for implementation partnerships.</p>
-          <div className="flex justify-center gap-4">
-            <Link href="/contact" className="bg-slate-900 px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest">Contact HQ</Link>
-            <Link href="/profile.pdf" className="bg-white text-sky-600 px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2">Profile <ArrowUpRight size={14}/></Link>
+        <section className="py-20 bg-sky-600 text-white text-center">
+          <div className="container mx-auto px-6">
+            <h2 className="text-2xl font-black mb-4">Partner With AGE South Sudan</h2>
+            <p className="text-sky-100 mb-8 max-w-xl mx-auto text-sm">View our full organizational profile or reach out to our Juba headquarters for implementation partnerships.</p>
+            <div className="flex justify-center gap-4">
+              <Link href="/contact" className="bg-slate-900 px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-colors">
+                Contact HQ
+              </Link>
+              {/* Route to a page, not the file */}
+              <Link href="/about/profile" className="bg-white text-sky-600 px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-sky-50 transition-colors">
+                View Profile <ArrowUpRight size={14}/>
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
     </main>
   );
 }
