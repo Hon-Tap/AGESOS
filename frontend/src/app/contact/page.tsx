@@ -26,11 +26,11 @@ export default function ContactPage() {
     const formData = new FormData(e.currentTarget);
     
     try {
-      // Replace 'YOUR_FORMSPREE_ID' with your actual ID from formspree.io
-      const response = await fetch("https://formspree.io/f/YOUR_FORMSPREE_ID", {
+      const response = await fetch("/api/news", { // Use the actual path where your route.ts is located
         method: "POST",
-        body: formData,
+        body: JSON.stringify(Object.fromEntries(formData)),
         headers: {
+          'Content-Type': 'application/json',
           'Accept': 'application/json'
         }
       });
