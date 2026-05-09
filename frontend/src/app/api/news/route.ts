@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       from: 'AGESOS Web <onboarding@resend.dev>', // Replace with your verified domain later
       to: ['info@agesos.org'],
       subject: `New Inquiry: ${inquiryType} from ${name}`,
-      reply_to: email,
+      replyTo: email,
       html: `
         <div style="font-family: sans-serif; padding: 20px; color: #333;">
           <h2>New Contact Form Submission</h2>
