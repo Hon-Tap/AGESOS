@@ -1,69 +1,166 @@
-import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { NextResponse } from "next/server";
+import { Resend } from "resend";
 
-// Initialize Resend with the environment variable from Vercel
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resendApiKey = process.env.RESEND_API_KEY;
+
+if (!resendApiKey) {
+  throw new Error("Missing RESEND_API_KEY in environment variables.");
+}
+
+const resend = new Resend(resendApiKey);
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, inquiryType, message } = body;
 
-    // 1. Validation
+    const {
+      name,
+      email,
+      inquiryType = "General Inquiry",
+      message,
+    } = body;
+
+    // Basic Validation
     if (!name || !email || !message) {
       return NextResponse.json(
-        { error: "Required fields are missing." }, 
+        {
+          success: false,
+          error: "Name, email, and message are required.",
+        },
         { status: 400 }
       );
     }
 
-    // 2. Logic: Send Email via your verified info@agesos.org address
+    // Email Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid email address.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // SEND EMAIL
     const { data, error } = await resend.emails.send({
-      // Using info@agesos.org as the authorized sender
-      from: 'AGESOS Contact <info@agesos.org>', 
-      to: ['info@agesos.org'],
+      // TEMPORARY TESTING SENDER
+      // Change this back after verifying agesos.org in Resend
+      from: "AGESOS Contact <onboarding@resend.dev>",
+
+      // Your receiving email
+      to: ["info@agesos.org"],
+
       subject: `New Inquiry: ${inquiryType} from ${name}`,
-      replyTo: email, // This allows you to click "Reply" and email the visitor directly
+
+      replyTo: email,
+
       html: `
-        <div style="font-family: sans-serif; padding: 20px; color: #333; line-height: 1.6;">
-          <h2 style="color: #0ea5e9; border-bottom: 2px solid #0ea5e9; padding-bottom: 10px;">
+        <div style="font-family: Arial, sans-serif; padding: 20px; color: #0f172a; line-height: 1.7;">
+          
+          <h2 style="color: #0ea5e9; margin-bottom: 20px;">
             New Contact Form Submission
           </h2>
-          <div style="margin-top: 20px;">
-            <p><strong>Sender Name:</strong> ${name}</p>
-            <p><strong>Sender Email:</strong> ${email}</p>
-            <p><strong>Category:</strong> ${inquiryType}</p>
+
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 8px 0;"><strong>Name:</strong></td>
+              <td>${name}</td>
+            </tr>
+
+            <tr>
+              <td style="padding: 8px 0;"><strong>Email:</strong></td>
+              <td>${email}</td>
+            </tr>
+
+            <tr>
+              <td style="padding: 8px 0;"><strong>Inquiry Type:</strong></td>
+              <td>${inquiryType}</td>
+            </tr>
+          </table>
+
+          <div
+            style="
+              margin-top: 30px;
+              padding: 20px;
+              background: #f8fafc;
+              border: 1px solid #e2e8f0;
+              border-radius: 10px;
+            "
+          >
+            <p
+              style="
+                margin-bottom: 10px;
+                font-size: 12px;
+                text-transform: uppercase;
+                color: #64748b;
+                font-weight: bold;
+              "
+            >
+              Message
+            </p>
+
+            <p style="white-space: pre-wrap;">
+              ${message}
+            </p>
           </div>
-          <div style="margin-top: 30px; padding: 20px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <p style="margin-bottom: 10px; font-weight: bold; color: #64748b; text-transform: uppercase; font-size: 12px;">Message:</p>
-            <p style="white-space: pre-wrap; color: #1e293b;">${message}</p>
-          </div>
-          <footer style="margin-top: 40px; font-size: 12px; color: #94a3b8;">
-            Sent automatically from AGESOS Web Portal
-          </footer>
+
+          <p
+            style="
+              margin-top: 40px;
+              font-size: 12px;
+              color: #94a3b8;
+            "
+          >
+            Sent automatically from the AGESOS website.
+          </p>
+
         </div>
       `,
     });
 
+    // RESEND ERROR
     if (error) {
-      console.error("Resend Operational Error:", error);
-      return NextResponse.json({ error }, { status: 500 });
+      console.error("Resend Error:", error);
+
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            error.message ||
+            "Failed to send email. Please verify your domain in Resend.",
+        },
+        { status: 500 }
+      );
     }
 
+    // SUCCESS
     return NextResponse.json(
-      { message: "Operational Dispatch Successful", id: data?.id }, 
+      {
+        success: true,
+        message: "Message sent successfully.",
+        id: data?.id,
+      },
       { status: 200 }
     );
+  } catch (error) {
+    console.error("Server Error:", error);
 
-  } catch (err) {
-    console.error("API Route Critical Failure:", err);
     return NextResponse.json(
-      { error: "Internal Server Error" }, 
+      {
+        success: false,
+        error: "Internal server error.",
+      },
       { status: 500 }
     );
   }
 }
 
 export async function GET() {
-  return NextResponse.json({ status: "Contact API is Online" });
+  return NextResponse.json({
+    success: true,
+    status: "Contact API is running.",
+  });
 }
