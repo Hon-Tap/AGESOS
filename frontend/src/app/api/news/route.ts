@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Initialize Resend with your API Key
-// You can get a free key at resend.com
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend with a fallback to prevent build-time crashes
+const resend = new Resend(process.env.RESEND_API_KEY || 're_61KKpEdE_PAFKkgtLze4M2mtCu6SETMyB');
 
 export async function POST(request: Request) {
   try {
@@ -18,27 +17,27 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. LOGIC: Send Email via Resend
-    // This sends the notification TO you (info@agesos.org)
+    // 2. Logic: Send Email via Resend
     const { data, error } = await resend.emails.send({
-      from: 'AGESOS Web <onboarding@resend.dev>', // Replace with your verified domain later
+      from: 'AGESOS Web <onboarding@resend.dev>', 
       to: ['info@agesos.org'],
       subject: `New Inquiry: ${inquiryType} from ${name}`,
       replyTo: email,
       html: `
-        <div style="font-family: sans-serif; padding: 20px; color: #333;">
-          <h2>New Contact Form Submission</h2>
+        <div style="font-family: sans-serif; padding: 20px; color: #333; line-height: 1.6;">
+          <h2 style="color: #0ea5e9;">New Contact Form Submission</h2>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Inquiry Type:</strong> ${inquiryType}</p>
-          <hr />
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
           <p><strong>Message:</strong></p>
-          <p style="white-space: pre-wrap;">${message}</p>
+          <p style="white-space: pre-wrap; background: #f8fafc; padding: 15px; rounded: 8px;">${message}</p>
         </div>
       `,
     });
 
     if (error) {
+      console.error("Resend Error:", error);
       return NextResponse.json({ error }, { status: 500 });
     }
 
@@ -56,7 +55,6 @@ export async function POST(request: Request) {
   }
 }
 
-// Keep GET only if you need to test the endpoint status
 export async function GET() {
   return NextResponse.json({ status: "Contact API is Online" });
 }
