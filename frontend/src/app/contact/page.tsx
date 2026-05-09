@@ -161,11 +161,11 @@ export default function ContactPage() {
                     <div className="grid md:grid-cols-2 gap-8">
                       <div className="space-y-3">
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Full Identity</label>
-                        <input required name="name" type="text" placeholder="John Doe" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-bold text-slate-900 placeholder:text-slate-300" />
+                        <input required name="name" type="text" placeholder="Full name..." className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-bold text-slate-900 placeholder:text-slate-300" />
                       </div>
                       <div className="space-y-3">
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Email for Response</label>
-                        <input required name="email" type="email" placeholder="john@example.com" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-bold text-slate-900 placeholder:text-slate-300" />
+                        <input required name="email" type="email" placeholder="email@example.com" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-5 focus:bg-white focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500 outline-none transition-all font-bold text-slate-900 placeholder:text-slate-300" />
                       </div>
                     </div>
 
