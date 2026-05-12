@@ -20,7 +20,7 @@ const NAV_ITEMS = [
     ],
   },
   {
-    label: "Our Work",
+    label: "Programs",
     href: "/programs",
   },
   {
