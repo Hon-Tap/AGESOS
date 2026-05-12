@@ -370,8 +370,8 @@ export default function Navbar() {
               {/* Mobile Contact & CTA */}
               <div className="absolute bottom-0 left-0 w-full border-t border-white/10 bg-slate-950/90 p-6 backdrop-blur-xl">
                 <div className="mb-6 flex flex-col gap-3 text-xs font-medium text-slate-400">
-                  <a href="mailto:contact@age-southsudan.org" className="flex items-center gap-3">
-                    <Mail size={14} className="text-sky-500" /> contact@age-southsudan.org
+                  <a href="mailto:info@agesos.org" className="flex items-center gap-3">
+                    <Mail size={14} className="text-sky-500" /> info@agesos.org
                   </a>
                   <a href="tel:+211920009257" className="flex items-center gap-3">
                     <Phone size={14} className="text-sky-500" /> +211 920 009 257

@@ -13,6 +13,7 @@ import {
   Users2,
   ShieldCheck,
   LucideIcon,
+  Sprout,
 } from "lucide-react";
 
 // --- Types ---
@@ -109,6 +110,18 @@ export default function ProgramsPage() {
       image: "/images/programs/wash.jpeg",
       desc: "Delivering life-saving water and sanitation services. We focus on rehabilitating critical infrastructure and promoting hygiene behavioral change to build community resilience.",
       icon: Droplets,
+      accentColor: "bg-sky-500",
+      interventionAreas: ["Borehole Rehabilitation", "CLTS (Sanitation) Training", "Hygiene Kit Distribution", "Water Management Committees"],
+      impactMetrics: [{ label: "Standard", value: "Sphere Standards" }, { label: "Impact", value: "Safe Access" }],
+    },
+    {
+      id: "Food Security & Livelihoods",
+      title: "Food Security & Livelihoods",
+      subtitle: "Sustainable Livelihoods & Nutrition",
+      image: "/images/programs/food-security.jpeg",
+      desc: "Promoting sustainable food systems and improving nutritional outcomes through community-based interventions and livelihood support.",
+      icon: Sprout,
+
       accentColor: "bg-sky-500",
       interventionAreas: ["Borehole Rehabilitation", "CLTS (Sanitation) Training", "Hygiene Kit Distribution", "Water Management Committees"],
       impactMetrics: [{ label: "Standard", value: "Sphere Standards" }, { label: "Impact", value: "Safe Access" }],
