@@ -53,7 +53,7 @@ export default function AboutPage() {
     {
       id: "dop",
       name: "Bailuk Gatluak Kedok",
-      role: "Director of Programs",
+      role: "Head of Programs",
       photo: "/images/GK.jpeg", 
       bio: "Gatluak ensures that Education, Health, and WASH programs deliver measurable impact, serving as the link between strategic planning and field-level execution.",
       focus: ["Program Design", "Technical Oversight", "Field Operations"],
@@ -69,7 +69,7 @@ export default function AboutPage() {
     {
       id: "fm",
       name: "Nyadouth William Deng",
-      role: "Finance Manager",
+      role: "Finance & Admin Manager",
       photo: "/images/nyaduoth.jpeg",
       bio: "Nyadouth directs the financial architecture of AGE, specializing in meticulous budgeting, fiscal planning, and transparent accountability.",
       focus: ["Fiscal Stewardship", "Audit Accountability", "Resource Management"],

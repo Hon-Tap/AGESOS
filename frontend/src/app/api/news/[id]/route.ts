@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-let mockArticles = [
+const mockArticles = [
   {
     id: "art_1",
     title: "Freedom Academy: Transforming Access for 500+ Children in Juba",
