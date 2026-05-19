@@ -184,7 +184,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-2 mt-1 text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">
                <ShieldCheck size={12} className="text-[#60A0D2]" />
-               National NGO Registration No. 2486
+               National NGO Registration No. 2534
             </div>
           </div>
 
