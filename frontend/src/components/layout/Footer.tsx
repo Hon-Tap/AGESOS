@@ -13,12 +13,12 @@ import {
   Facebook,
   Twitter,
   Linkedin,
-  MessageCircle,
   X,
   Scale,
   Lock,
   FileCheck
 } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 // --- Types & Data ---
 type ModalType = "privacy" | "terms" | "compliance" | null;
@@ -108,21 +108,40 @@ export default function Footer() {
             </p>
 
             <div className="flex gap-3">
-              {[
-                { icon: Facebook, label: "Facebook" },
-                { icon: Twitter, label: "X" },
-                { icon: Linkedin, label: "LinkedIn" },
-                { icon: MessageCircle, label: "WhatsApp" }
-              ].map((social) => (
-                <a 
-                  key={social.label} 
-                  href="#" 
-                  className="h-11 w-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-[#60A0D2] hover:text-[#0D1630] hover:border-[#60A0D2] transition-all"
-                >
-                  <social.icon size={18} />
-                </a>
-              ))}
-            </div>
+            {[
+              { 
+                icon: Facebook, 
+                label: "Facebook",
+                href: "https://www.facebook.com/share/1Hw11LH2R3/"
+              },
+              // { 
+              //   icon: Twitter, 
+              //   label: "X",
+              //   href: "#" 
+              // },
+              // { 
+              //   icon: Linkedin, 
+              //   label: "LinkedIn",
+              //   href: "#" 
+              // },
+              { 
+                icon: FaWhatsapp, 
+                label: "WhatsApp",
+                href: "https://wa.me/message/GP65KGR37NHUP1"
+              }
+            ].map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.label}
+                className="h-11 w-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-[#60A0D2] hover:text-[#0D1630] hover:border-[#60A0D2] transition-all"
+              >
+                <social.icon size={18} />
+              </a>
+            ))}
+          </div>
           </div>
 
           {/* Sitemaps */}
