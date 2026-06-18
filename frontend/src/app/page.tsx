@@ -39,7 +39,7 @@ type Story = {
 const HERO_SLIDES = [
   "/images/hero.jpeg",
   "/images/programs/health.jpeg",
-  "/images/programs/wash-hero.jpeg",
+  "/images/programs/wash.jpeg",
   "/images/child-edu.jpeg",
 ];
 
