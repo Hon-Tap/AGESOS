@@ -60,7 +60,7 @@ const PROGRAMS: Program[] = [
     title: "WASH",
     href: "/programs#wash",
     desc: "Delivering clean water, sanitation infrastructure, and hygiene awareness in vulnerable communities.",
-    image: "/images/programs/wash.jpeg",
+    image: "/images/programs/community.jpeg",
   },
   {
     title: "Food Security",
@@ -72,7 +72,7 @@ const PROGRAMS: Program[] = [
     title: "Nutrition",
     href: "/programs#nutrition",
     desc: "Preventing malnutrition and supporting healthy child development through community nutrition programs.",
-    image: "/images/programs/nutrition.jpeg",
+    image: "/images/programs/emergency.jpeg",
   },
   {
     title: "Community Development",
