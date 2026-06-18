@@ -155,7 +155,7 @@ export default function Navbar() {
               isScrolled ? "h-11 w-11" : "h-12 w-12 lg:h-14 lg:w-14"
             )}>
               <Image
-                src="/age-logo.png"
+                src="/age-logo.jpg"
                 alt="AGE Logo"
                 fill
                 className="object-contain"
