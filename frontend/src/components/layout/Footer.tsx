@@ -92,57 +92,58 @@ export default function Footer() {
         <div className="grid lg:grid-cols-12 gap-16 lg:gap-8 mb-20">
           
           {/* Brand & Mission */}
-          <div className="lg:col-span-5">
-            <Link href="/" className="flex items-center gap-4 mb-8">
-              <div className="h-12 w-12 bg-white rounded-xl p-2 shadow-xl shadow-sky-500/10 transition-transform hover:rotate-3">
-                <Image src="/age-logo.png" alt="AGE Logo" width={40} height={40} className="object-contain" />
-              </div>
-              <div>
-                <h3 className="text-lg font-black text-white leading-none tracking-tight uppercase">AGE South Sudan</h3>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#60A0D2] mt-1">Generational Education</p>
-              </div>
-            </Link>
-            
-            <p className="text-slate-400 text-sm leading-relaxed max-w-sm mb-10">
-              Agency for Generational Education (AGE) is a registered National NGO dedicated to bridging the gap in education, health, and sustainable livelihoods for remote communities in South Sudan.
-            </p>
+<div className="lg:col-span-5">
+  <Link href="/" className="group flex items-center gap-4 mb-6">
+    <div className="relative h-16 w-16 overflow-hidden transition-transform duration-500 group-hover:scale-105">
+      <Image 
+        src="/age-logo.png" 
+        alt="AGE Logo" 
+        fill 
+        className="object-contain brightness-0 invert" 
+        priority
+      />
+    </div>
+    <div className="flex flex-col justify-center">
+      <h3 className="text-xl font-black text-white leading-none tracking-tight">
+        AGE <span className="text-sky-400">South Sudan</span>
+      </h3>
+      <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 mt-1.5 leading-none">
+        Agency for Generational Education
+      </p>
+    </div>
+  </Link>
+  
+  <p className="text-slate-400 text-sm leading-relaxed max-w-sm mb-8">
+    Agency for Generational Education (AGE) is a registered National NGO dedicated to bridging the gap in education, health, and sustainable livelihoods for remote communities in South Sudan.
+  </p>
 
-            <div className="flex gap-3">
-            {[
-              { 
-                icon: Facebook, 
-                label: "Facebook",
-                href: "https://www.facebook.com/share/1Hw11LH2R3/"
-              },
-              // { 
-              //   icon: Twitter, 
-              //   label: "X",
-              //   href: "#" 
-              // },
-              // { 
-              //   icon: Linkedin, 
-              //   label: "LinkedIn",
-              //   href: "#" 
-              // },
-              { 
-                icon: FaWhatsapp, 
-                label: "WhatsApp",
-                href: "https://wa.me/message/GP65KGR37NHUP1"
-              }
-            ].map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={social.label}
-                className="h-11 w-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-[#60A0D2] hover:text-[#0D1630] hover:border-[#60A0D2] transition-all"
-              >
-                <social.icon size={18} />
-              </a>
-            ))}
-          </div>
-          </div>
+  {/* Social Links */}
+  <div className="flex gap-3">
+    {[
+      { 
+        icon: Facebook, 
+        label: "Facebook",
+        href: "https://www.facebook.com/share/1Hw11LH2R3/"
+      },
+      { 
+        icon: FaWhatsapp, 
+        label: "WhatsApp",
+        href: "https://wa.me/message/GP65KGR37NHUP1"
+      }
+    ].map((social) => (
+      <a
+        key={social.label}
+        href={social.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={social.label}
+        className="h-11 w-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-sky-500 hover:text-white hover:border-sky-500 transition-all duration-300 hover:scale-110 shadow-lg hover:shadow-sky-500/20"
+      >
+        <social.icon size={18} />
+      </a>
+    ))}
+  </div>
+</div>
 
           {/* Sitemaps */}
           <div className="lg:col-span-3 grid sm:grid-cols-2 lg:grid-cols-1 gap-10">

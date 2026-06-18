@@ -101,200 +101,206 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={cn(
-          "fixed inset-x-0 top-0 z-[100] w-full transition-all duration-500",
-          isScrolled || !isHomePage
-            ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200"
-            : "bg-transparent"
-        )}
-      >
-        {/* TOP CONTACT BAR - "Masquerade Motion" (Hides on Scroll) */}
-        <motion.div
-          initial={{ height: "auto", opacity: 1 }}
-          animate={{
-            height: isScrolled ? 0 : "auto",
-            opacity: isScrolled ? 0 : 1,
-          }}
-          transition={{ duration: 0.4, ease: "easeInOut" }}
-          className={cn(
-            "hidden lg:block overflow-hidden border-b transition-colors duration-300",
-            isHomePage ? "border-white/10 text-white/80" : "border-slate-200 text-slate-500"
-          )}
-        >
-          <div className="container mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-2.5 text-[10px] font-black uppercase tracking-[0.15em]">
-            <div className="flex items-center gap-6">
-              <span className="flex items-center gap-2 hover:text-sky-400 transition-colors cursor-default">
-                <MapPin size={12} className="text-sky-500" />
-                Juba HQ, Central Equatoria, South Sudan
-              </span>
-            </div>
-            <div className="flex items-center gap-6">
-              <a href="mailto:info@agesos.org" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
-                <Mail size={12} className="text-sky-500" />
-                info@agesos.org
-              </a>
-              <a href="tel:+211920009257" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
-                <Phone size={12} className="text-sky-500" />
-                +211 920 009 257
-              </a>
-            </div>
-          </div>
-        </motion.div>
+  className={cn(
+    "fixed inset-x-0 top-0 z-[100] w-full transition-all duration-500",
+    isScrolled || !isHomePage
+      ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200"
+      : "bg-transparent"
+  )}
+>
+  {/* TOP CONTACT BAR - "Masquerade Motion" (Hides on Scroll) */}
+  <motion.div
+    initial={{ height: "auto", opacity: 1 }}
+    animate={{
+      height: isScrolled ? 0 : "auto",
+      opacity: isScrolled ? 0 : 1,
+    }}
+    transition={{ duration: 0.4, ease: "easeInOut" }}
+    className={cn(
+      "hidden lg:block overflow-hidden border-b transition-colors duration-300",
+      isHomePage ? "border-white/10 text-white/80" : "border-slate-200 text-slate-500"
+    )}
+  >
+    <div className="container mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-2.5 text-[10px] font-black uppercase tracking-[0.15em]">
+      <div className="flex items-center gap-6">
+        <span className="flex items-center gap-2 hover:text-sky-400 transition-colors cursor-default">
+          <MapPin size={12} className="text-sky-500" />
+          Juba HQ, Central Equatoria, South Sudan
+        </span>
+      </div>
+      <div className="flex items-center gap-6">
+        <a href="mailto:info@agesos.org" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
+          <Mail size={12} className="text-sky-500" />
+          info@agesos.org
+        </a>
+        <a href="tel:+211920009257" className="flex items-center gap-2 hover:text-sky-400 transition-colors">
+          <Phone size={12} className="text-sky-500" />
+          +211 920 009 257
+        </a>
+      </div>
+    </div>
+  </motion.div>
 
-        {/* MAIN NAVBAR */}
-        <div
+  {/* MAIN NAVBAR */}
+  <div
+    className={cn(
+      "container mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 transition-all duration-500",
+      isScrolled ? "py-3 lg:py-4" : "py-4 lg:py-6"
+    )}
+  >
+    {/* LOGO SECTION */}
+    <Link href="/" className="group relative z-[110] flex items-center gap-3.5">
+      <div className={cn(
+        "relative overflow-hidden transition-all duration-500 group-hover:scale-105", 
+        // Increased size considerably to account for the image's internal layout padding
+        isScrolled ? "h-14 w-14" : "h-16 w-16 lg:h-20 lg:w-20"
+      )}>
+        <Image
+          src="/age-logo.png"
+          alt="AGE Logo"
+          fill
           className={cn(
-            "container mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 transition-all duration-500",
-            isScrolled ? "py-3 lg:py-4" : "py-5 lg:py-8"
+            "object-contain transition-all duration-500",
+            // Dynamically apply brightness/inversion when on transparent hero background
+            (!isScrolled && isHomePage) && "brightness-0 invert tracking-normal"
+          )}
+          priority
+        />
+      </div>
+      
+      <div className="flex flex-col justify-center">
+        <span
+          className={cn(
+            "font-black tracking-tight transition-all duration-500 leading-none mb-1.5",
+            isScrolled ? "text-xl" : "text-2xl",
+            isScrolled || !isHomePage ? "text-slate-900" : "text-white"
           )}
         >
-          {/* LOGO SECTION */}
-      <Link href="/" className="group relative z-[110] flex items-center gap-4">
-        <div className={cn(
-          "relative overflow-hidden transition-all duration-500 group-hover:scale-105", 
-          isScrolled ? "h-11 w-11" : "h-12 w-12 lg:h-14 lg:w-14"
+          AGE <span className={cn("transition-colors duration-500", isScrolled || !isHomePage ? "text-sky-600" : "text-sky-300")}>South Sudan</span>
+        </span>
+        <span className={cn(
+          "text-[10px] font-bold uppercase tracking-[0.12em] transition-colors duration-500 leading-none",
+          isScrolled || !isHomePage ? "text-slate-500" : "text-white/80"
         )}>
-          <Image
-            src="/age-logo.png"
-            alt="AGE Logo"
-            fill
-            className="object-contain"
-            priority
-          />
-        </div>
-        <div className="flex flex-col justify-center">
-          <span
-            className={cn(
-              "font-black tracking-tight transition-all duration-500 leading-none mb-1",
-              isScrolled ? "text-lg" : "text-xl",
-              isScrolled || !isHomePage ? "text-slate-900" : "text-white"
+          Agency for Generational Education
+        </span>
+      </div>
+    </Link>
+
+    {/* DESKTOP NAV */}
+    <nav className="hidden lg:flex items-center gap-1.5">
+      {NAV_ITEMS.map((item) => (
+        <div
+          key={item.label}
+          className="relative"
+          onMouseEnter={() => setHoveredNav(item.label)}
+          onMouseLeave={() => setHoveredNav(null)}
+        >
+          {item.items ? (
+            <button
+              className={cn(
+                "group flex items-center gap-1.5 px-4 py-2.5 text-[13px] font-bold tracking-wide transition-all rounded-full",
+                isScrolled || !isHomePage
+                  ? "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                  : "text-white/90 hover:text-white hover:bg-white/10"
+              )}
+            >
+              {item.label}
+              <svg
+                className={cn(
+                  "h-3.5 w-3.5 transition-transform duration-300 opacity-60",
+                  hoveredNav === item.label && "rotate-180"
+                )}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={3}
+              >
+                <path d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          ) : (
+            <Link
+              href={item.href!}
+              className={cn(
+                "relative flex px-4 py-2.5 text-[13px] font-bold tracking-wide transition-all rounded-full",
+                isScrolled || !isHomePage
+                  ? "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                  : "text-white/90 hover:text-white hover:bg-white/10"
+              )}
+            >
+              {item.label}
+              {isActive(item.href!) && (
+                <motion.span 
+                  layoutId="activeNav"
+                  className="absolute bottom-1 left-1/2 h-[3px] w-5 -translate-x-1/2 bg-sky-500 rounded-full" 
+                />
+              )}
+            </Link>
+          )}
+
+          <AnimatePresence>
+            {item.items && hoveredNav === item.label && (
+              <motion.div
+                initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="absolute left-1/2 top-full mt-2 w-64 -translate-x-1/2 overflow-hidden rounded-2xl border border-slate-100 bg-white p-2.5 shadow-2xl ring-1 ring-black/5"
+              >
+                {item.items.map((subItem) => (
+                  <Link
+                    key={subItem.href}
+                    href={subItem.href}
+                    className={cn(
+                      "block rounded-xl px-4 py-3 text-[13px] font-bold transition-all",
+                      isActive(subItem.href)
+                        ? "bg-sky-50 text-sky-600"
+                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    )}
+                  >
+                    {subItem.label}
+                  </Link>
+                ))}
+              </motion.div>
             )}
-          >
-            AGE <span className="text-sky-600">South Sudan</span>
-          </span>
-          <span className={cn(
-            "text-[9px] font-bold uppercase tracking-[0.15em] transition-colors duration-500",
-            isScrolled || !isHomePage ? "text-slate-500" : "text-white/70"
-          )}>
-            Agency for Generational Education
-          </span>
+          </AnimatePresence>
         </div>
+      ))}
+    </nav>
+
+    {/* RIGHT CTA & MOBILE TOGGLE */}
+    <div className="flex items-center gap-5">
+      <Link
+        href="/get-involved#donate"
+        className="hidden lg:inline-flex items-center rounded-full bg-sky-500 px-7 py-3.5 text-[11px] font-black tracking-widest uppercase text-white transition-all duration-300 hover:bg-sky-600 hover:scale-105 active:scale-95 shadow-lg shadow-sky-500/30"
+      >
+        Donate Now
       </Link>
 
-          {/* DESKTOP NAV */}
-          <nav className="hidden lg:flex items-center gap-1.5">
-            {NAV_ITEMS.map((item) => (
-              <div
-                key={item.label}
-                className="relative"
-                onMouseEnter={() => setHoveredNav(item.label)}
-                onMouseLeave={() => setHoveredNav(null)}
-              >
-                {item.items ? (
-                  <button
-                    className={cn(
-                      "group flex items-center gap-1.5 px-4 py-2.5 text-[13px] font-bold tracking-wide transition-all rounded-full",
-                      isScrolled || !isHomePage
-                        ? "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                        : "text-white/90 hover:text-white hover:bg-white/10"
-                    )}
-                  >
-                    {item.label}
-                    <svg
-                      className={cn(
-                        "h-3.5 w-3.5 transition-transform duration-300 opacity-60",
-                        hoveredNav === item.label && "rotate-180"
-                      )}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={3}
-                    >
-                      <path d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                ) : (
-                  <Link
-                    href={item.href!}
-                    className={cn(
-                      "relative flex px-4 py-2.5 text-[13px] font-bold tracking-wide transition-all rounded-full",
-                      isScrolled || !isHomePage
-                        ? "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                        : "text-white/90 hover:text-white hover:bg-white/10"
-                    )}
-                  >
-                    {item.label}
-                    {isActive(item.href!) && (
-                      <motion.span 
-                        layoutId="activeNav"
-                        className="absolute bottom-1 left-1/2 h-[3px] w-5 -translate-x-1/2 bg-sky-500 rounded-full" 
-                      />
-                    )}
-                  </Link>
-                )}
-
-                <AnimatePresence>
-                  {item.items && hoveredNav === item.label && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.98 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="absolute left-1/2 top-full mt-2 w-64 -translate-x-1/2 overflow-hidden rounded-2xl border border-slate-100 bg-white p-2.5 shadow-2xl ring-1 ring-black/5"
-                    >
-                      {item.items.map((subItem) => (
-                        <Link
-                          key={subItem.href}
-                          href={subItem.href}
-                          className={cn(
-                            "block rounded-xl px-4 py-3 text-[13px] font-bold transition-all",
-                            isActive(subItem.href)
-                              ? "bg-sky-50 text-sky-600"
-                              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                          )}
-                        >
-                          {subItem.label}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </nav>
-
-          {/* RIGHT CTA & MOBILE TOGGLE */}
-          <div className="flex items-center gap-5">
-            <Link
-              href="/get-involved#donate"
-              className="hidden lg:inline-flex items-center rounded-full bg-sky-500 px-7 py-3.5 text-[11px] font-black tracking-widest uppercase text-white transition-all duration-300 hover:bg-sky-600 hover:scale-105 active:scale-95 shadow-lg shadow-sky-500/30"
-            >
-              Donate Now
-            </Link>
-
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="relative z-[160] flex h-10 w-10 flex-col items-center justify-center gap-[6px] lg:hidden"
-              aria-label="Toggle Menu"
-            >
-              <span
-                className={cn(
-                  "block h-[2.5px] rounded-full bg-current transition-all duration-300 ease-out",
-                  hamburgerColor,
-                  mobileOpen ? "w-6 translate-y-[8.5px] rotate-45" : "w-6"
-                )}
-              />
-              <span
-                className={cn(
-                  "block h-[2.5px] rounded-full bg-current transition-all duration-300 ease-out",
-                  hamburgerColor,
-                  mobileOpen ? "w-6 -translate-y-[8.5px] -rotate-45" : "w-4 ml-auto"
-                )}
-              />
-            </button>
-          </div>
-        </div>
-      </header>
+      <button
+        onClick={() => setMobileOpen(!mobileOpen)}
+        className="relative z-[160] flex h-10 w-10 flex-col items-center justify-center gap-[6px] lg:hidden"
+        aria-label="Toggle Menu"
+      >
+        <span
+          className={cn(
+            "block h-[2.5px] rounded-full bg-current transition-all duration-300 ease-out",
+            hamburgerColor,
+            mobileOpen ? "w-6 translate-y-[8.5px] rotate-45" : "w-6"
+          )}
+        />
+        <span
+          className={cn(
+            "block h-[2.5px] rounded-full bg-current transition-all duration-300 ease-out",
+            hamburgerColor,
+            mobileOpen ? "w-6 -translate-y-[8.5px] -rotate-45" : "w-4 ml-auto"
+          )}
+        />
+      </button>
+    </div>
+  </div>
+</header>
 
       {/* MOBILE MENU (3/4 Screen Drawer) */}
       <AnimatePresence>
