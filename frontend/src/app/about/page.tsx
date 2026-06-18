@@ -46,7 +46,7 @@ export default function AboutPage() {
     },
     {
       id: "dop",
-      name: "Bailuk Gatluak Kedok",
+      name: "Gatluak Kedok Jiek",
       role: "Head of Programs",
       photo: "/images/GK.jpeg", 
       bio: "Gatluak ensures that Education, Health, and WASH programs deliver measurable impact, serving as the link between strategic planning and field-level execution.",
