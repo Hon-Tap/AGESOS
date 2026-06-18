@@ -149,37 +149,37 @@ export default function Navbar() {
           )}
         >
           {/* LOGO SECTION */}
-          <Link href="/" className="group relative z-[110] flex items-center gap-4">
-            <div className={cn(
-              "relative overflow-hidden rounded-xl bg-white p-1 shadow-sm border border-slate-100 transition-all duration-500 group-hover:scale-105 group-hover:shadow-md",
-              isScrolled ? "h-11 w-11" : "h-12 w-12 lg:h-14 lg:w-14"
-            )}>
-              <Image
-                src="/age-logo.jpg"
-                alt="AGE Logo"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-            <div className="flex flex-col justify-center">
-              <span
-                className={cn(
-                  "font-black tracking-tight transition-all duration-500 leading-none mb-1",
-                  isScrolled ? "text-lg" : "text-xl",
-                  isScrolled || !isHomePage ? "text-slate-900" : "text-white"
-                )}
-              >
-                AGE <span className="text-sky-600">South Sudan</span>
-              </span>
-              <span className={cn(
-                "text-[9px] font-bold uppercase tracking-[0.15em] transition-colors duration-500",
-                isScrolled || !isHomePage ? "text-slate-500" : "text-white/70"
-              )}>
-                Agency for Generational Education
-              </span>
-            </div>
-          </Link>
+      <Link href="/" className="group relative z-[110] flex items-center gap-4">
+        <div className={cn(
+          "relative overflow-hidden transition-all duration-500 group-hover:scale-105", 
+          isScrolled ? "h-11 w-11" : "h-12 w-12 lg:h-14 lg:w-14"
+        )}>
+          <Image
+            src="/age-logo.png"
+            alt="AGE Logo"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
+        <div className="flex flex-col justify-center">
+          <span
+            className={cn(
+              "font-black tracking-tight transition-all duration-500 leading-none mb-1",
+              isScrolled ? "text-lg" : "text-xl",
+              isScrolled || !isHomePage ? "text-slate-900" : "text-white"
+            )}
+          >
+            AGE <span className="text-sky-600">South Sudan</span>
+          </span>
+          <span className={cn(
+            "text-[9px] font-bold uppercase tracking-[0.15em] transition-colors duration-500",
+            isScrolled || !isHomePage ? "text-slate-500" : "text-white/70"
+          )}>
+            Agency for Generational Education
+          </span>
+        </div>
+      </Link>
 
           {/* DESKTOP NAV */}
           <nav className="hidden lg:flex items-center gap-1.5">
