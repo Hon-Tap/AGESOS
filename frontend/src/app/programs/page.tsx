@@ -118,7 +118,7 @@ export default function ProgramsPage() {
       id: "Food Security & Livelihoods",
       title: "Food Security & Livelihoods",
       subtitle: "Sustainable Livelihoods & Nutrition",
-      image: "/images/programs/food-security.jpeg",
+      image: "/images/programs/emergency.jpeg",
       desc: "Promoting sustainable food systems and improving nutritional outcomes through community-based interventions and livelihood support.",
       icon: Sprout,
 
