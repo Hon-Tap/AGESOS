@@ -153,7 +153,7 @@ export default function Navbar() {
       <div className={cn(
         "relative overflow-hidden transition-all duration-500 group-hover:scale-105", 
         // Increased size considerably to account for the image's internal layout padding
-        isScrolled ? "h-14 w-14" : "h-16 w-16 lg:h-20 lg:w-20"
+        isScrolled ? "h-18 w-18" : "h-20 w-20 lg:h-20 lg:w-24"
       )}>
         <Image
           src="/age-logo.png"
